@@ -1,0 +1,10 @@
+# Ignoring Intellij IDEA files
+.idea/
+.svn/
+*.iml
+out/
+target/
+*.class
+*.jar
+*.war
+*.ear
