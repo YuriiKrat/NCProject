@@ -13,6 +13,7 @@ import java.util.List;
 public class Task {
 
     private Integer id;
+    private String name;
     private Integer estimate;
     private Date startDate;
     private List<Task> influencedTasks;
@@ -77,5 +78,13 @@ public class Task {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

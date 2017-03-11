@@ -11,6 +11,7 @@ import java.util.List;
 public class Project {
 
     private Integer id;
+    private String name;
     private Date startDate;
     private Date finishDate;
     private List<Sprint> sprints;
@@ -48,5 +49,13 @@ public class Project {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

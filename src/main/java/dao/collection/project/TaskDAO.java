@@ -1,4 +1,4 @@
-package dao.collection;
+package dao.collection.project;
 
 import dao.AbstractDAO;
 import entities.project.Task;

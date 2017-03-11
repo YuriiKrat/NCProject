@@ -10,6 +10,7 @@ import java.util.List;
 public class Sprint {
 
     private Integer id;
+    private String name;
     private Boolean isFinished;
     private List<Task> tasks;
 
@@ -38,5 +39,13 @@ public class Sprint {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

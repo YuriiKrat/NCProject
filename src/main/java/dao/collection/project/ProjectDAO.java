@@ -1,0 +1,44 @@
+package dao.collection.project;
+
+import dao.AbstractDAO;
+import entities.project.Project;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+/**
+ * Created by win10 on 11.03.2017.
+ */
+public class ProjectDAO implements AbstractDAO<Project, Integer> {
+
+    private Map<Integer, Project> projects;
+
+    public ProjectDAO() {
+        projects = new ConcurrentHashMap<>();
+    }
+
+    @Override
+    public void insert(Project obj) {
+        projects.put(obj.getId(), obj);
+    }
+
+    @Override
+    public Map<Integer, Project> findAll() {
+        return projects;
+    }
+
+    @Override
+    public void update(Project obj) {
+        projects.put(obj.getId(), obj);
+    }
+
+    @Override
+    public Project get(Integer key) {
+        return projects.get(key);
+    }
+
+    @Override
+    public void delete(Project obj) {
+        projects.remove(obj.getId());
+    }
+}
