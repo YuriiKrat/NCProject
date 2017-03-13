@@ -38,7 +38,7 @@ public class EmployeeDAO implements AbstractDAO<Employee, Integer> {
     }
 
     @Override
-    public void delete(Employee obj) {
-        employees.remove(obj.getId());
+    public Employee delete(Employee obj) {
+        return employees.remove(obj.getId());
     }
 }

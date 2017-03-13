@@ -40,15 +40,8 @@ public class TaskDAO implements AbstractDAO<Task, Integer> {
     }
 
     @Override
-    public void delete(Task obj) {
-        tasks.remove(obj.getId());
+    public Task delete(Task obj) {
+        return tasks.remove(obj.getId());
     }
 
-    public Map<Integer, Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(Map<Integer, Task> tasks) {
-        this.tasks = tasks;
-    }
 }

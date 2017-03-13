@@ -38,7 +38,7 @@ public class SprintDAO implements AbstractDAO<Sprint, Integer> {
     }
 
     @Override
-    public void delete(Sprint obj) {
-        sprints.remove(obj.getId());
+    public Sprint delete(Sprint obj) {
+        return sprints.remove(obj.getId());
     }
 }

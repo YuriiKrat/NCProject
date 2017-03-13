@@ -38,7 +38,7 @@ public class CustomerDAO implements AbstractDAO<Customer, Integer> {
     }
 
     @Override
-    public void delete(Customer obj) {
-        customers.remove(obj.getId());
+    public Customer delete(Customer obj) {
+        return customers.remove(obj.getId());
     }
 }

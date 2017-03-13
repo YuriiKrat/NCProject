@@ -38,7 +38,7 @@ public class ManagerDAO implements AbstractDAO<Manager, Integer> {
     }
 
     @Override
-    public void delete(Manager obj) {
-        managers.remove(obj.getId());
+    public Manager delete(Manager obj) {
+        return managers.remove(obj.getId());
     }
 }

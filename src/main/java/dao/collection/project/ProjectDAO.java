@@ -38,7 +38,7 @@ public class ProjectDAO implements AbstractDAO<Project, Integer> {
     }
 
     @Override
-    public void delete(Project obj) {
-        projects.remove(obj.getId());
+    public Project delete(Project obj) {
+        return projects.remove(obj.getId());
     }
 }
