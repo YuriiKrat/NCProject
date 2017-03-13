@@ -1,6 +1,6 @@
 package dao.collection.project;
 
-import dao.AbstractDAO;
+import dao.collection.CollectionAbstractDAO;
 import entities.project.Sprint;
 
 import java.util.Map;
@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by win10 on 11.03.2017.
  */
-public class SprintDAO implements AbstractDAO<Sprint, Integer> {
+public class SprintDAO implements CollectionAbstractDAO<Sprint, Integer> {
 
     private Map<Integer, Sprint> sprints;
 

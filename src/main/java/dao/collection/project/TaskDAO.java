@@ -1,6 +1,6 @@
 package dao.collection.project;
 
-import dao.AbstractDAO;
+import dao.collection.CollectionAbstractDAO;
 import entities.project.Task;
 
 import java.util.Map;
@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version 1.0
  * @since 06.03.17.
  */
-public class TaskDAO implements AbstractDAO<Task, Integer> {
+public class TaskDAO implements CollectionAbstractDAO<Task, Integer> {
 
     private Map<Integer, Task> tasks;
 

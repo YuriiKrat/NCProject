@@ -12,6 +12,7 @@ public class User {
     private String password;
     private String firstName;
     private String lastName;
+    private UserRole userRole;
 
     public User() {
 
@@ -55,5 +56,13 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public UserRole getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
     }
 }

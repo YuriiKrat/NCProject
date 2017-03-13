@@ -1,6 +1,6 @@
-package dao;
+package dao.db;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * @author Yurii Krat
@@ -19,7 +19,7 @@ public interface AbstractDAO<T, K>{
      * Gets all objects of concrete entity from database
      * @return all objects from database
      */
-    Map<K, T> findAll();
+    List<T> findAll();
 
     /**
      * Updates object in database

@@ -1,6 +1,6 @@
 package dao.collection.users;
 
-import dao.AbstractDAO;
+import dao.collection.CollectionAbstractDAO;
 import entities.users.Employee;
 
 import java.util.Map;
@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by win10 on 11.03.2017.
  */
-public class EmployeeDAO implements AbstractDAO<Employee, Integer> {
+public class EmployeeDAO implements CollectionAbstractDAO<Employee, Integer> {
 
     private Map<Integer, Employee> employees;
 

@@ -1,6 +1,6 @@
 package dao.collection.users;
 
-import dao.AbstractDAO;
+import dao.collection.CollectionAbstractDAO;
 import entities.users.Manager;
 
 import java.util.Map;
@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by win10 on 11.03.2017.
  */
-public class ManagerDAO implements AbstractDAO<Manager, Integer> {
+public class ManagerDAO implements CollectionAbstractDAO<Manager, Integer> {
 
     private Map<Integer, Manager> managers;
 
