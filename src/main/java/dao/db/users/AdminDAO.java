@@ -1,6 +1,6 @@
 package dao.db.users;
 
-import dao.db.AbstractDAO;
+import dao.xml.users.dao.AbstractDAO;
 import dao.db.connection.ConnectionManager;
 import entities.users.User;
 import org.apache.log4j.Logger;

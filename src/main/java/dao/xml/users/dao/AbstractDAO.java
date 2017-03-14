@@ -1,4 +1,4 @@
-package dao.db;
+package dao.xml.users.dao;
 
 import java.util.List;
 

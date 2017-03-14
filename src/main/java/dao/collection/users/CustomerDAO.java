@@ -1,15 +1,17 @@
 package dao.collection.users;
 
-import dao.collection.CollectionAbstractDAO;
+import dao.xml.users.dao.AbstractDAO;
 import entities.users.Customer;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * Created by win10 on 11.03.2017.
  */
-public class CustomerDAO implements CollectionAbstractDAO<Customer, Integer> {
+public class CustomerDAO implements AbstractDAO<Customer, Integer> {
 
     private Map<Integer, Customer> customers;
 
@@ -23,8 +25,8 @@ public class CustomerDAO implements CollectionAbstractDAO<Customer, Integer> {
     }
 
     @Override
-    public Map<Integer, Customer> findAll() {
-        return customers;
+    public List<Customer> findAll() {
+        return customers.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList());
     }
 
     @Override

@@ -113,3 +113,17 @@ ERROR: syntax error at or near "'references'"
   Position: 13
 2017-03-13 21:13:45 ERROR InitDB:68 - 1
 2017-03-13 21:14:22 ERROR InitDB:68 - 1
+2017-03-14 12:21:08 WARN  UserDAO:40 - Can not insert value into xml-file! null
+2017-03-14 12:22:56 WARN  UserDAO:41 - Can not insert value into xml-file! null
+2017-03-14 12:26:50 WARN  UserDAO:41 - Can not insert value into xml-file! null
+2017-03-14 13:00:15 WARN  UserDAO:64 - Can not insert value into xml-file! class java.util.ArrayList nor any of its super class is known to this context.
+2017-03-14 13:00:31 WARN  UserDAO:64 - Can not insert value into xml-file! class java.util.ArrayList nor any of its super class is known to this context.
+2017-03-14 13:25:34 WARN  UserDAO:50 - Can not insert value into xml-file! null
+2017-03-14 13:25:57 WARN  UserDAO:50 - Can not insert value into xml-file! null
+2017-03-14 13:26:57 WARN  UserDAO:52 - Can not insert value into xml-file! class dao.xml.users.Users nor any of its super class is known to this context.
+2017-03-14 13:28:26 WARN  UserDAO:52 - Can not insert value into xml-file! null
+2017-03-14 13:28:46 WARN  UserDAO:52 - Can not insert value into xml-file! null
+2017-03-14 13:29:09 WARN  UserDAO:52 - Can not insert value into xml-file! class dao.xml.users.Users nor any of its super class is known to this context.
+2017-03-14 13:29:58 WARN  UserDAO:52 - Can not insert value into xml-file! class dao.xml.users.Users nor any of its super class is known to this context.
+2017-03-14 13:32:21 WARN  UserDAO:52 - Can not insert value into xml-file! class dao.xml.users.Users nor any of its super class is known to this context.
+2017-03-14 13:34:29 WARN  UserDAO:52 - Can not insert value into xml-file! null

@@ -1,15 +1,17 @@
 package dao.collection.project;
 
-import dao.collection.CollectionAbstractDAO;
+import dao.xml.users.dao.AbstractDAO;
 import entities.project.Project;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * Created by win10 on 11.03.2017.
  */
-public class ProjectDAO implements CollectionAbstractDAO<Project, Integer> {
+public class ProjectDAO implements AbstractDAO<Project, Integer> {
 
     private Map<Integer, Project> projects;
 
@@ -23,8 +25,8 @@ public class ProjectDAO implements CollectionAbstractDAO<Project, Integer> {
     }
 
     @Override
-    public Map<Integer, Project> findAll() {
-        return projects;
+    public List<Project> findAll() {
+        return projects.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList());
     }
 
     @Override

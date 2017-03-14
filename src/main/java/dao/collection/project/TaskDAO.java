@@ -1,17 +1,19 @@
 package dao.collection.project;
 
-import dao.collection.CollectionAbstractDAO;
+import dao.xml.users.dao.AbstractDAO;
 import entities.project.Task;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * @author Yurii Krat
  * @version 1.0
  * @since 06.03.17.
  */
-public class TaskDAO implements CollectionAbstractDAO<Task, Integer> {
+public class TaskDAO implements AbstractDAO<Task, Integer> {
 
     private Map<Integer, Task> tasks;
 
@@ -25,8 +27,8 @@ public class TaskDAO implements CollectionAbstractDAO<Task, Integer> {
     }
 
     @Override
-    public Map<Integer, Task> findAll() {
-        return tasks;
+    public List<Task> findAll() {
+        return tasks.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList());
     }
 
     @Override

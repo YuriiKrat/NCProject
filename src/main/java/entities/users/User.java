@@ -1,27 +1,35 @@
 package entities.users;
 
+import javax.xml.bind.annotation.*;
+
 /**
  * @author Yurii Krat
  * @version 1.0
  * @since 26.02.17.
  */
+
+@XmlRootElement(name = "users")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class User {
 
-    private Integer id;
-    private String username;
-    private String password;
-    private String firstName;
-    private String lastName;
-    private UserRole userRole;
+    protected Integer id;
+
+    protected String username;
+    protected String password;
+    protected String firstName;
+    protected String lastName;
+    protected UserRole userRole;
 
     public User() {
 
     }
 
+
     public Integer getId() {
         return id;
     }
 
+//    @XmlAttribute
     public void setId(Integer id) {
         this.id = id;
     }
@@ -30,6 +38,7 @@ public class User {
         return username;
     }
 
+//    @XmlElement
     public void setUsername(String username) {
         this.username = username;
     }
@@ -38,6 +47,7 @@ public class User {
         return password;
     }
 
+//    @XmlElement
     public void setPassword(String password) {
         this.password = password;
     }
@@ -46,6 +56,7 @@ public class User {
         return firstName;
     }
 
+//    @XmlElement
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -54,6 +65,7 @@ public class User {
         return lastName;
     }
 
+//    @XmlElement
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -62,7 +74,31 @@ public class User {
         return userRole;
     }
 
+//    @XmlElement
     public void setUserRole(UserRole userRole) {
         this.userRole = userRole;
+    }
+
+//    @Override
+//    protected User clone() throws CloneNotSupportedException {
+//        User user = new User();
+//        user.setUsername(username);
+//        user.setLastName(lastName);
+//        user.setFirstName(firstName);
+//        user.setId(id);
+//        user.setPassword(password);
+//        return user;
+//    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", userRole=" + userRole +
+                '}';
     }
 }
