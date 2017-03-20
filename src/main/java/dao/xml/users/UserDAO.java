@@ -33,12 +33,24 @@ public class UserDAO extends XmlWriter<Users> implements AbstractDAO<User, Integ
     @Override
     public void insert(User obj) {
         logger.info("Attempting to insert user with id = " + obj.getId());
+        boolean unique = true;
         users = unmarshall();
         if (users == null) {
             users = new Users();
         }
-        users.getUsers().add(obj);
-        marshall(users);
+        for (int i = 0; i < users.getUsers().size(); i++) {
+            if (obj.getId().equals(users.getUsers().get(i).getId())) {
+                unique = false;
+                break;
+            }
+        }
+        if (unique) {
+            users.getUsers().add(obj);
+            marshall(users);
+        } else {
+            logger.warn("Error while inserting user! User with id = " + obj.getId() + " already exists!");
+        }
+
     }
 
     @Override
@@ -99,22 +111,21 @@ public class UserDAO extends XmlWriter<Users> implements AbstractDAO<User, Integ
     public static void main(String[] args) throws JAXBException, ParserConfigurationException {
         User manager = new User();
         manager.setId(13);
-        manager.setFirstName("FIRStName");
+        manager.setFirstName("FIRST");
         manager.setLastName("LastName");
         manager.setUsername("username");
-        manager.setUserRole(UserRole.EMPLOYEE);
+        manager.setUserRole(UserRole.MANAGER);
         UserDAO managerDAO = new UserDAO();
-        System.out.println(managerDAO.get(12));
+//        System.out.println(managerDAO.get(12));
 //        System.out.println(manager.equals(managerDAO.get(12)));
 //        managerDAO.update(manager);
 //        managerDAO.insert(manager);
 //        managerDAO.insert(manager);
-        System.out.println(managerDAO.delete(manager));
-        System.out.println(managerDAO.get(12));
+//        System.out.println(managerDAO.delete(manager));
 //        managerDAO.insert(manager);
 //        unMarshalingExample();
-//        List<User> userList = managerDAO.findAll();
-//        userList.forEach(el -> System.out.println(el.toString()));
+        List<User> userList = managerDAO.findAll();
+        userList.forEach(el -> System.out.println(el.toString()));
 
 
 

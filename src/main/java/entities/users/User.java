@@ -74,58 +74,36 @@ public class User {
         this.userRole = userRole;
     }
 
-//    @Override
-//    protected User clone() throws CloneNotSupportedException {
-//        User user = new User();
-//        user.setUsername(username);
-//        user.setLastName(lastName);
-//        user.setFirstName(firstName);
-//        user.setId(id);
-//        user.setPassword(password);
-//        return user;
-//    }
-
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (getId() != null ? !getId().equals(user.getId()) : user.getId() != null)
             return false;
-        if (getClass() != obj.getClass())
+        if (getUsername() != null ? !getUsername().equals(user.getUsername()) : user.getUsername() != null)
             return false;
-        User other = (User) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
+        if (getPassword() != null ? !getPassword().equals(user.getPassword()) : user.getPassword() != null)
             return false;
-        if (username == null) {
-            if (other.username != null)
-                return false;
-        } else if (!username.equals(other.username))
+        if (getFirstName() != null ? !getFirstName().equals(user.getFirstName()) : user.getFirstName() != null)
             return false;
-        if (password == null) {
-            if (other.password != null)
-                return false;
-        } else if (!password.equals(other.password))
+        if (getLastName() != null ? !getLastName().equals(user.getLastName()) : user.getLastName() != null)
             return false;
-        if (firstName == null) {
-            if (other.firstName != null)
-                return false;
-        } else if (!firstName.equals(other.firstName))
-            return false;
-        if (lastName == null) {
-            if (other.lastName != null)
-                return false;
-        } else if (!lastName.equals(other.lastName))
-            return false;
-        if (userRole == null) {
-            if (other.userRole != null)
-                return false;
-        } else if (!userRole.equals(other.userRole))
-            return false;
-        return true;
+        return getUserRole() == user.getUserRole();
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId() != null ? getId().hashCode() : 0;
+        result = 31 * result + (getUsername() != null ? getUsername().hashCode() : 0);
+        result = 31 * result + (getPassword() != null ? getPassword().hashCode() : 0);
+        result = 31 * result + (getFirstName() != null ? getFirstName().hashCode() : 0);
+        result = 31 * result + (getLastName() != null ? getLastName().hashCode() : 0);
+        result = 31 * result + (getUserRole() != null ? getUserRole().hashCode() : 0);
+        return result;
     }
 
     @Override
