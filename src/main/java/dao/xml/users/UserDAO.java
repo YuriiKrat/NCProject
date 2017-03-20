@@ -104,12 +104,13 @@ public class UserDAO extends XmlWriter<Users> implements AbstractDAO<User, Integ
         manager.setUsername("username");
         manager.setUserRole(UserRole.EMPLOYEE);
         UserDAO managerDAO = new UserDAO();
-//        System.out.println(managerDAO.get(12));
+        System.out.println(managerDAO.get(12));
 //        System.out.println(manager.equals(managerDAO.get(12)));
 //        managerDAO.update(manager);
 //        managerDAO.insert(manager);
 //        managerDAO.insert(manager);
         System.out.println(managerDAO.delete(manager));
+        System.out.println(managerDAO.get(12));
 //        managerDAO.insert(manager);
 //        unMarshalingExample();
 //        List<User> userList = managerDAO.findAll();

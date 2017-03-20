@@ -1,6 +1,7 @@
 # Ignoring Intellij IDEA files
 .idea/
 .svn/
+xml/
 *.iml
 out/
 target/
@@ -8,3 +9,4 @@ target/
 *.jar
 *.war
 *.ear
+*.log
