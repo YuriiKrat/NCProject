@@ -1,6 +1,6 @@
 package dao.collection.project;
 
-import dao.xml.users.dao.AbstractDAO;
+import dao.AbstractDAO;
 import entities.project.Task;
 
 import java.util.List;

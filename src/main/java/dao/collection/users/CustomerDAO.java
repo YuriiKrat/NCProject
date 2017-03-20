@@ -1,6 +1,6 @@
 package dao.collection.users;
 
-import dao.xml.users.dao.AbstractDAO;
+import dao.AbstractDAO;
 import entities.users.Customer;
 
 import java.util.List;

@@ -2,6 +2,9 @@ package entities.project;
 
 import entities.users.Qualification;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +13,8 @@ import java.util.List;
  * @version 1.0
  * @since 26.02.17.
  */
+@XmlRootElement(name = "tasks")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Task {
 
     private Integer id;
