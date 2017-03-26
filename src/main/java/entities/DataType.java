@@ -11,6 +11,7 @@ public enum DataType {
     BOOLEAN,
     INTEGER,
     DOUBLE,
-    DATE
+    DATE,
+    OBJECT
 
 }

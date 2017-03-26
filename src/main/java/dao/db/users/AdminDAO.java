@@ -73,6 +73,8 @@ public class AdminDAO implements AbstractDAO<User, Integer> {
                 booleanValueColumn + ") VALUES (?, ?);";
         String insertDateValuesQuery = "INSERT INTO " + valuesTableName + " (attribute_id, " +
                 dateValueColumn + ") VALUES (?, ?);";
+        String insertObjectValuesQuery = "INSERT INTO " + valuesTableName + " (attribute_id)" +
+                " VALUES (?);";
 
         Connection connection = connectionManager.getConnection();
         int entity_id;
@@ -81,7 +83,6 @@ public class AdminDAO implements AbstractDAO<User, Integer> {
         Map<Method, Pair<DataType, String>> attributes = new HashMap<>();
         for (Method method : clazz.getDeclaredMethods()) {
             if (method.getName().startsWith("get") && !method.getName().startsWith("getId")) {
-//               attributes.put(method.getName().substring(3, method.getName().length()), getReturnType(method));
                 attributes.put(method, getReturnType(method));
             }
         }
@@ -103,8 +104,6 @@ public class AdminDAO implements AbstractDAO<User, Integer> {
                 String typeName = null;
                 if (entry.getValue() != null) {
                     typeName = entry.getValue().getKey().toString();
-                } else {
-                    break;
                 }
                 // todo get type_id for null values
                 insertAttributeStatement.setString(2, typeName);
@@ -126,34 +125,45 @@ public class AdminDAO implements AbstractDAO<User, Integer> {
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
-                boolean isObject = false;
+
                 String column = entry.getValue().getValue();
+                boolean isObject = true;
 
-                if (column.equals(textValueColumn)) {
-                    insertValueStatement = connection.prepareStatement(insertStringValuesQuery);
-                    insertValueStatement.setString(2, param.toString());
-                } else if(column.equals(integerValueColumn)) {
-                    insertValueStatement = connection.prepareStatement(insertIntegerValuesQuery);
-                    insertValueStatement.setInt(2, (Integer)param);
-                } else if(column.equals(doubleValueColumn)) {
-                    insertValueStatement = connection.prepareStatement(insertDoubleValuesQuery);
-                    insertValueStatement.setDouble(2, (Double)param);
-                } else if(column.equals(dateValueColumn)) {
-                    insertValueStatement = connection.prepareStatement(insertDateValuesQuery);
-                    insertValueStatement.setDate(2, (java.sql.Date) param);
-                } else if(column.equals(booleanValueColumn)) {
-                    insertValueStatement = connection.prepareStatement(insertBooleanValuesQuery);
-                    insertValueStatement.setBoolean(2, (Boolean)param);
-                } else {
-                    isObject = true;
+                if (column != null) {
+                    switch (column) {
+                        case textValueColumn:
+                            insertValueStatement = connection.prepareStatement(insertStringValuesQuery);
+                            insertValueStatement.setString(2, param.toString());
+                            break;
+                        case integerValueColumn:
+                            insertValueStatement = connection.prepareStatement(insertIntegerValuesQuery);
+                            insertValueStatement.setInt(2, (Integer) param);
+                            break;
+                        case doubleValueColumn:
+                            insertValueStatement = connection.prepareStatement(insertDoubleValuesQuery);
+                            insertValueStatement.setDouble(2, (Double) param);
+                            break;
+                        case dateValueColumn:
+                            insertValueStatement = connection.prepareStatement(insertDateValuesQuery);
+                            insertValueStatement.setDate(2, (java.sql.Date) param);
+                            break;
+                        case booleanValueColumn:
+                            insertValueStatement = connection.prepareStatement(insertBooleanValuesQuery);
+                            insertValueStatement.setBoolean(2, (Boolean) param);
+                            break;
+                    }
+                    isObject = false;
+                }
+                if (isObject) {
+                    insertValueStatement = connection.prepareStatement(insertObjectValuesQuery);
                 }
 
-                if (!isObject) {
-                    insertValueStatement.setInt(1, attribute_id);
-                    insertValueStatement.executeUpdate();
-                }
+                insertValueStatement.setInt(1, attribute_id);
+                insertValueStatement.executeUpdate();
+
             }
             connection.commit();
+
         } catch (SQLException e) {
             e.printStackTrace();
             try {
@@ -193,10 +203,10 @@ public class AdminDAO implements AbstractDAO<User, Integer> {
     public static void main(String[] args) {
         AdminDAO adminDAO = new AdminDAO();
         User user = new User();
-        user.setUsername("username");
-        user.setLastName("lastname");
-        user.setFirstName("firstname");
-        user.setPassword("password");
+        user.setUsername("username1");
+        user.setLastName("lastname1");
+        user.setFirstName("firstname1");
+        user.setPassword("password1");
         user.setUserRole(UserRole.ADMIN);
         adminDAO.insert(user);
 
@@ -214,7 +224,7 @@ public class AdminDAO implements AbstractDAO<User, Integer> {
         } else if (method.getReturnType().equals(Boolean.TYPE)) {
             return new Pair<>(DataType.BOOLEAN, booleanValueColumn);
         } else {
-            return null;
+            return new Pair<>(DataType.OBJECT, null);
         }
     }
 }
