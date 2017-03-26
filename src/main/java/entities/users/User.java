@@ -1,5 +1,7 @@
 package entities.users;
 
+import entities.project.Project;
+
 import javax.xml.bind.annotation.*;
 
 /**
@@ -15,11 +17,21 @@ public class User {
     @XmlAttribute
     protected Integer id;
 
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    protected Project project;
+
     protected String username;
     protected String password;
     protected String firstName;
     protected String lastName;
-    protected UserRole userRole;
+    protected String userRole;
 
     public User() {
 
@@ -66,11 +78,11 @@ public class User {
         this.lastName = lastName;
     }
 
-    public UserRole getUserRole() {
+    public String getUserRole() {
         return userRole;
     }
 
-    public void setUserRole(UserRole userRole) {
+    public void setUserRole(String userRole) {
         this.userRole = userRole;
     }
 

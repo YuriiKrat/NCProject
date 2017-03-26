@@ -52,7 +52,7 @@ public class ManagerDAO implements AbstractDAO<Manager, Integer> {
         manager.setFirstName("ZHEKA");
         manager.setLastName("STEPANJUIK");
         manager.setUsername("LOH");
-        manager.setUserRole(UserRole.EMPLOYEE);
+        manager.setUserRole(UserRole.EMPLOYEE.toString());
         ManagerDAO managerDAO = new ManagerDAO();
         managerDAO.insert(manager);
         managerDAO.findAll().forEach(System.out::println);

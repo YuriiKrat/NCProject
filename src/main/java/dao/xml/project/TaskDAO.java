@@ -89,16 +89,16 @@ public class TaskDAO implements AbstractDAO<Task, Integer> {
         task1.setName("Task1");
         task1.setStartDate(new Date());
         task1.setEstimate(10);
-        task1.setPreferredQualification(Qualification.MIDDLE);
-        task1.setStatus(TaskStatus.OPEN);
+        task1.setPreferredQualification(Qualification.MIDDLE.toString());
+        task1.setStatus(TaskStatus.OPEN.toString());
 
         Task task2 = new Task();
         task2.setId(2);
         task2.setName("Task2");
         task2.setStartDate(new Date());
         task2.setEstimate(10);
-        task2.setPreferredQualification(Qualification.MIDDLE);
-        task2.setStatus(TaskStatus.OPEN);
+        task2.setPreferredQualification(Qualification.MIDDLE.toString());
+        task2.setStatus(TaskStatus.OPEN.toString());
 
         List<Task> subtasks = new ArrayList<>();
         subtasks.add(task2);

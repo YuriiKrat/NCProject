@@ -1,11 +1,9 @@
 package dao.db.users;
 
-import dao.AbstractDAO;
+import dao.db.AbstractDAOImpl;
 import dao.db.connection.ConnectionManager;
 import entities.DataType;
 import entities.project.Project;
-import entities.project.Task;
-import entities.users.Customer;
 import entities.users.User;
 import entities.users.UserRole;
 import javafx.util.Pair;
@@ -24,7 +22,7 @@ import java.util.Date;
  * @version 1.0
  * @since 13.03.17.
  */
-public class AdminDAO implements AbstractDAO<User, Integer> {
+public class AdminDAO extends AbstractDAOImpl<User, Integer> {
 
     private ConnectionManager connectionManager;
     private static final Logger logger = Logger.getLogger(AdminDAO.class);
@@ -86,7 +84,7 @@ public class AdminDAO implements AbstractDAO<User, Integer> {
         Connection connection = connectionManager.getConnection();
         int entity_id;
         int attribute_id;
-        Class clazz = obj.getClass();
+        Class clazz = getEntityClass();
         Map<Method, Pair<DataType, String>> attributes = new HashMap<>();
         for (Method method : clazz.getDeclaredMethods()) {
             if (method.getName().startsWith("get") && !method.getName().startsWith("getId")) {
@@ -136,7 +134,6 @@ public class AdminDAO implements AbstractDAO<User, Integer> {
 
                 try {
                     param = entry.getKey().invoke(obj);
-                    logger.error("INFA: " + param.getClass().getName());
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
@@ -212,11 +209,52 @@ public class AdminDAO implements AbstractDAO<User, Integer> {
 
     @Override
     public void update(User obj) {
+        String getAttributesQuery = "SELECT " + attributesTableName + ".id, " +
+                attributesTableName + ".name, " +
+                attributesTableName + ".is_multiple, " +
+                attributeTypesTableName + ".name AS type_name FROM " + attributesTableName +
+                " INNER JOIN " + referencesTableName +
+                " ON " + referencesTableName  + ".attribute_id = "
+                + attributesTableName + ".id LEFT JOIN " + attributeTypesTableName +
+                " ON " + attributeTypesTableName  + ".id = "
+                + attributesTableName + ".type_id WHERE entity_id = ?;";
+
+        Connection connection = connectionManager.getConnection();
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement getAttributesStatement = connection.prepareStatement(getAttributesQuery);
+            getAttributesStatement.setInt(1, obj.getId());
+            ResultSet resultSet = getAttributesStatement.executeQuery();
+            while (resultSet.next()) {
+                if(!resultSet.getBoolean("is_multiple")) {
+                    try {
+                        setValuesWhenUpdate(connection, resultSet, obj);
+                    } catch (InvocationTargetException | NoSuchMethodException |
+                            IllegalAccessException | ClassNotFoundException e) {
+                        logger.warn("Failed to retrieve entity params! " + e.getMessage());
+                    }
+
+
+                } else {
+                    // todo for lists
+                }
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            logger.error("Failed to insert entity into db! " + e.getMessage());
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                logger.error("Failed to do rollback! " + e1.getMessage());
+            }
+        }
 
     }
 
     @Override
     public User get(Integer key) {
+        User user = null;
+
         return null;
     }
 
@@ -228,14 +266,15 @@ public class AdminDAO implements AbstractDAO<User, Integer> {
     public static void main(String[] args) {
         AdminDAO adminDAO = new AdminDAO();
         User user = new User();
-        user.setUsername("username3");
-        user.setLastName("lastname3");
-        user.setFirstName("firstname3");
-        user.setPassword("password3");
-        user.setUserRole(UserRole.ADMIN);
+        user.setId(52);
+        user.setUsername("username5");
+        user.setLastName("lastname5");
+        user.setFirstName("firstname5");
+        user.setPassword("password5");
+        user.setUserRole(UserRole.ADMIN.toString() + "5");
 //        List<Project> list = new ArrayList<>();
 //        user.setProjects(list);
-        adminDAO.insert(user);
+//        adminDAO.update(user);
 //        Object o = new User();
 //        System.out.println(o.getClass().getName());
 //        try {
@@ -251,7 +290,7 @@ public class AdminDAO implements AbstractDAO<User, Integer> {
 
     }
 
-    private static Pair<DataType, String> getReturnType(Method method) {
+    private Pair<DataType, String> getReturnType(Method method) {
 
         if (method.getReturnType().equals(Integer.class)) {
             return new Pair<>(DataType.INTEGER, integerValueColumn);
@@ -268,5 +307,64 @@ public class AdminDAO implements AbstractDAO<User, Integer> {
         } else {
             return new Pair<>(DataType.OBJECT, null);
         }
+    }
+
+    private void setValuesWhenUpdate(Connection connection, ResultSet resultSet, User user)
+            throws SQLException, InvocationTargetException, IllegalAccessException, NoSuchMethodException,
+            ClassNotFoundException {
+
+        String setStringValuesQuery = "UPDATE " + valuesTableName + " SET text_value = ? WHERE attribute_id = ?;";
+        String setIntegerValuesQuery = "UPDATE " + valuesTableName + " SET integer_value = ? WHERE attribute_id = ?;";
+        String setDoubleValuesQuery = "UPDATE " + valuesTableName + " SET double_value = ? WHERE attribute_id = ?;";
+        String setDateValuesQuery = "UPDATE " + valuesTableName + " SET date_value = ? WHERE attribute_id = ?;";
+        String setBooleanValuesQuery = "UPDATE " + valuesTableName + " SET boolean_value = ? WHERE attribute_id = ?;";
+        String setObjectValuesQuery = "UPDATE " + valuesTableName + " SET entity_id = ? WHERE attribute_id = ?;";
+        String getEntityTypeQuery = "SELECT " + entitiesTypeTableName + ".name FROM" + attributeBindsTableName +
+                "INNER JOIN " + entitiesTypeTableName + " ON entity_type_id = " + attributesTableName + ".id" +
+                " WHERE attribute_id = ?;";
+
+        String type = resultSet.getString("type_name");
+        PreparedStatement statement = null;
+        Method method = getEntityClass().getMethod("get" + resultSet.getString("name"));
+        if (type != null) {
+            if (DataType.STRING.toString().equals(type)) {
+                statement = connection.prepareStatement(setStringValuesQuery);
+                statement.setString(1, (String)method.invoke(user));
+            } else if (DataType.INTEGER.toString().equals(type)) {
+                statement = connection.prepareStatement(setIntegerValuesQuery);
+                statement.setInt(1, (Integer) method.invoke(user));
+            } else if (DataType.DOUBLE.toString().equals(type)) {
+                statement = connection.prepareStatement(setDoubleValuesQuery);
+                statement.setDouble(1, (Double) method.invoke(user));
+            } else if (DataType.DATE.toString().equals(type)) {
+                statement = connection.prepareStatement(setDateValuesQuery);
+                statement.setDate(1, (java.sql.Date) method.invoke(user));
+            } else if (DataType.BOOLEAN.toString().equals(type)) {
+                statement = connection.prepareStatement(setBooleanValuesQuery);
+                statement.setBoolean(1, (Boolean) method.invoke(user));
+            }
+        } else {
+            PreparedStatement getObjectTypeStatement = connection.prepareStatement(getEntityTypeQuery);
+            getObjectTypeStatement.setInt(1, resultSet.getInt("id"));
+            ResultSet result = getObjectTypeStatement.executeQuery();
+            result.next();
+            String entityTypeName = result.getString("name");
+            statement = connection.prepareStatement(setObjectValuesQuery);
+            statement.setInt(1, getObjectId(entityTypeName, method, user));
+        }
+        statement.setInt(2, resultSet.getInt("id"));
+        statement.executeUpdate();
+    }
+
+    private Integer getObjectId(String name, Method method, User user)
+            throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Class clazz = Class.forName(name);
+        Method innerMethod = clazz.getMethod("getId");
+        return (Integer) innerMethod.invoke(method.invoke(user));
+    }
+
+    @Override
+    protected Class<User> getEntityClass() {
+        return User.class;
     }
 }

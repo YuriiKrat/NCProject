@@ -11,17 +11,17 @@ import java.util.List;
  */
 public class Employee extends User {
 
-    private Qualification qualification;
+    private String qualification;
     private List<Task> tasks;
 
     public Employee() {
     }
 
-    public Qualification getQualification() {
+    public String getQualification() {
         return qualification;
     }
 
-    public void setQualification(Qualification qualification) {
+    public void setQualification(String qualification) {
         this.qualification = qualification;
     }
 

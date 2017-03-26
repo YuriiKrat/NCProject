@@ -15,7 +15,7 @@ public class Manager extends User {
     private List<Project> projects;
 
     public Manager() {
-        setUserRole(UserRole.MANAGER);
+        setUserRole(UserRole.MANAGER.toString());
     }
 
     public List<Project> getProjects() {
@@ -34,7 +34,7 @@ public class Manager extends User {
         manager.setLastName(lastName);
         manager.setPassword(password);
         manager.setUsername(username);
-        manager.setUserRole(UserRole.MANAGER);
+        manager.setUserRole(UserRole.MANAGER.toString());
         System.out.println(manager);
         return manager;
     }

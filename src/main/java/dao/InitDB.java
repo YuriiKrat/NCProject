@@ -99,19 +99,18 @@ public class InitDB {
     public static void main(String[] args) {
         InitDB db = new InitDB();
 
-
-        db.insertEntitiesTypes("java.util.LinkedList");
+//        db.insertEntitiesTypes("java.util.LinkedList");
+//        db.insertEntitiesTypes("java.util.ArrayList");
 //        db.insertEntitiesTypes("entities.users.Manager");
 //        db.insertEntitiesTypes("entities.users.Employee");
 //        db.insertEntitiesTypes("entities.users.Customer");
-//        db.insertEntitiesTypes("entities.users.UserRole");
-//        db.insertEntitiesTypes("entities.users.Qualification");
 //
+//        db.insertEntitiesTypes("entities.users.User");
 //        db.insertEntitiesTypes("entities.project.Project");
 //        db.insertEntitiesTypes("entities.project.Sprint");
 //        db.insertEntitiesTypes("entities.project.Task");
 //        db.insertEntitiesTypes("entities.project.TaskStatus");
-//
+////
 //        db.insertEntitiesTypes("entities.Company");
 //
 //        db.insertAttributeTypes(DataType.BOOLEAN.toString());
@@ -120,10 +119,6 @@ public class InitDB {
 //        db.insertAttributeTypes(DataType.INTEGER.toString());
 //        db.insertAttributeTypes(DataType.STRING.toString());
 
-//        db.insertUserRoles(UserRole.ADMIN);
-//        db.insertUserRoles(UserRole.CUSTOMER);
-//        db.insertUserRoles(UserRole.EMPLOYEE);
-//        db.insertUserRoles(UserRole.MANAGER);
 
     }
 }

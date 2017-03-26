@@ -25,8 +25,8 @@ public class Task {
     private Date startDate;
     private List<Task> influencedTasks;
     private List<Task> subtasks;
-    private Qualification preferredQualification;
-    private TaskStatus status;
+    private String preferredQualification;
+    private String status;
 
     public Task() {
     }
@@ -63,19 +63,19 @@ public class Task {
         this.subtasks = subtasks;
     }
 
-    public Qualification getPreferredQualification() {
+    public String getPreferredQualification() {
         return preferredQualification;
     }
 
-    public void setPreferredQualification(Qualification preferredQualification) {
+    public void setPreferredQualification(String preferredQualification) {
         this.preferredQualification = preferredQualification;
     }
 
-    public TaskStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(TaskStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
