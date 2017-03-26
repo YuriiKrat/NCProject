@@ -12,6 +12,7 @@ public enum DataType {
     INTEGER,
     DOUBLE,
     DATE,
-    OBJECT
+    OBJECT,
+    LIST
 
 }

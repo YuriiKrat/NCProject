@@ -99,7 +99,8 @@ public class InitDB {
     public static void main(String[] args) {
         InitDB db = new InitDB();
 
-//        db.insertEntitiesTypes("entities.users.User");
+
+        db.insertEntitiesTypes("java.util.LinkedList");
 //        db.insertEntitiesTypes("entities.users.Manager");
 //        db.insertEntitiesTypes("entities.users.Employee");
 //        db.insertEntitiesTypes("entities.users.Customer");
