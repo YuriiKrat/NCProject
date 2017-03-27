@@ -1,7 +1,6 @@
 # Ignoring Intellij IDEA files
 .idea/
 .svn/
-xml/
 *.iml
 out/
 target/
