@@ -1,4 +1,4 @@
-package entities;
+package dao.db;
 
 /**
  * @author Yurii Krat

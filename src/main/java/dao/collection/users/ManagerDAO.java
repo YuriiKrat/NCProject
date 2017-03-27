@@ -1,9 +1,13 @@
 package dao.collection.users;
 
 import dao.AbstractDAO;
+import dao.collection.AbstractDAOImpl;
+import entities.project.Project;
 import entities.users.Manager;
 import entities.users.UserRole;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,38 +16,21 @@ import java.util.stream.Collectors;
 /**
  * Created by win10 on 11.03.2017.
  */
-public class ManagerDAO implements AbstractDAO<Manager, Integer> {
-
-    private Map<Integer, Manager> managers;
-
-    public ManagerDAO() {
-        managers = new ConcurrentHashMap<>();
-    }
+public class ManagerDAO extends AbstractDAOImpl<Manager, Integer> {
 
     @Override
     public void insert(Manager obj) {
-        Manager manager = obj.clone();
-        managers.put(manager.getId(), manager);
-    }
-
-    @Override
-    public List<Manager> findAll() {
-        return managers.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList());
+        entities.put(obj.getId(), new Manager(obj));
     }
 
     @Override
     public void update(Manager obj) {
-        managers.put(obj.getId(), obj);
-    }
-
-    @Override
-    public Manager get(Integer key) {
-        return managers.get(key);
+        entities.put(obj.getId(), obj);
     }
 
     @Override
     public Manager delete(Manager obj) {
-        return managers.remove(obj.getId());
+        return entities.remove(obj.getId());
     }
 
     public static void main(String[] args) {
@@ -53,10 +40,16 @@ public class ManagerDAO implements AbstractDAO<Manager, Integer> {
         manager.setLastName("STEPANJUIK");
         manager.setUsername("LOH");
         manager.setUserRole(UserRole.EMPLOYEE.toString());
+        Project project = new Project(1, "1", new Date(), new Date());
+        ArrayList<Project> projects = new ArrayList<>();
+        projects.add(project);
+        manager.setProjects(projects);
         ManagerDAO managerDAO = new ManagerDAO();
         managerDAO.insert(manager);
         managerDAO.findAll().forEach(System.out::println);
         manager.setUsername("BARAN");
-        System.out.println(managerDAO.get(1));
+        project.setId(2);
+        managerDAO.update(manager);
+        managerDAO.findAll().forEach(System.out::println);
     }
 }

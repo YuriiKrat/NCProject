@@ -2,8 +2,7 @@ package dao.db.users;
 
 import dao.db.AbstractDAOImpl;
 import dao.db.connection.ConnectionManager;
-import entities.DataType;
-import entities.project.Project;
+import dao.db.DataType;
 import entities.users.User;
 import entities.users.UserRole;
 import javafx.util.Pair;

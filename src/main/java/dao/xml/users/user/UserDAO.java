@@ -1,4 +1,4 @@
-package dao.xml.users;
+package dao.xml.users.user;
 
 import dao.AbstractDAO;
 import dao.xml.XmlWriter;
@@ -109,17 +109,19 @@ public class UserDAO extends XmlWriter<Users> implements AbstractDAO<User, Integ
     }
 
     public static void main(String[] args) throws JAXBException, ParserConfigurationException {
-//        User manager = new User();
-//        manager.setId(13);
-//        manager.setFirstName("FIRST");
-//        manager.setLastName("LastName");
-//        manager.setUsername("username");
-//        manager.setUserRole(UserRole.MANAGER.toString());
+        User manager = new User();
+        manager.setId(12);
+        manager.setFirstName("FIRST");
+        manager.setLastName("LastName");
+        manager.setUsername("username");
+        manager.setUserRole(UserRole.MANAGER.toString());
+
         UserDAO managerDAO = new UserDAO();
+
 //        System.out.println(managerDAO.get(12));
 //        System.out.println(manager.equals(managerDAO.get(12)));
 //        managerDAO.update(manager);
-//        managerDAO.insert(manager);
+        managerDAO.insert(manager);
 //        managerDAO.insert(manager);
 //        System.out.println(managerDAO.delete(manager));
 //        managerDAO.insert(manager);

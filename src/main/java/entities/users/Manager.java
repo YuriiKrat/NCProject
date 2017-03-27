@@ -3,6 +3,7 @@ package entities.users;
 import com.sun.org.apache.xpath.internal.SourceTree;
 import entities.project.Project;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +19,29 @@ public class Manager extends User {
         setUserRole(UserRole.MANAGER.toString());
     }
 
+    public Manager(Integer id, String username, String password, String firstName, String lastName) {
+        super(id, username, password, firstName, lastName, UserRole.MANAGER.toString());
+    }
+
+    public Manager(Integer id, String username, String password, String firstName, String lastName,
+                   List<Project> projects) {
+        super(id, username, password, firstName, lastName, UserRole.MANAGER.toString());
+        this.projects = projects;
+    }
+
+    public Manager(Manager manager) {
+        this(manager.getId(), manager.getUsername(), manager.getPassword(), manager.getFirstName(),
+                manager.getLastName());
+
+        if (manager.getProjects() != null) {
+            projects = new ArrayList<>();
+
+            for (Project project : manager.getProjects()) {
+                projects.add(new Project(project));
+            }
+        }
+    }
+
     public List<Project> getProjects() {
         return projects;
     }
@@ -27,20 +51,34 @@ public class Manager extends User {
     }
 
     @Override
-    public Manager clone() {
-        Manager manager = new Manager();
-        manager.setId(id);
-        manager.setFirstName(firstName);
-        manager.setLastName(lastName);
-        manager.setPassword(password);
-        manager.setUsername(username);
-        manager.setUserRole(UserRole.MANAGER.toString());
-        System.out.println(manager);
-        return manager;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Manager manager = (Manager) o;
+
+        return getProjects() != null ? getProjects().equals(manager.getProjects()) : manager.getProjects() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getProjects() != null ? getProjects().hashCode() : 0);
+        return result;
     }
 
     @Override
     public String toString() {
-        return super.toString();
+        return "Manager{" +
+                "id=" + getId() +
+                ", username='" + getUsername() + '\'' +
+                ", password='" + getPassword() + '\'' +
+                ", firstName='" + getFirstName() + '\'' +
+                ", lastName='" + getLastName() + '\'' +
+                ", userRole='" + getUserRole() + '\'' +
+                ", projects=" + projects +
+                '}';
     }
+
 }

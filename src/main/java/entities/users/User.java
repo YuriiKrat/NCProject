@@ -15,28 +15,29 @@ import javax.xml.bind.annotation.*;
 public class User {
 
     @XmlAttribute
-    protected Integer id;
-
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
-    }
-
-    protected Project project;
-
-    protected String username;
-    protected String password;
-    protected String firstName;
-    protected String lastName;
-    protected String userRole;
+    private Integer id;
+    private String username;
+    private String password;
+    private String firstName;
+    private String lastName;
+    private String userRole;
 
     public User() {
-
     }
 
+    public User(Integer id, String username, String password, String firstName, String lastName, String userRole) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userRole = userRole;
+    }
+
+    public User(User user) {
+        this(user.getId(), user.getUsername(), user.getPassword(), user.getFirstName(), user.getLastName(),
+                user.getUserRole());
+    }
 
     public Integer getId() {
         return id;
@@ -94,8 +95,7 @@ public class User {
 
         User user = (User) o;
 
-        if (getId() != null ? !getId().equals(user.getId()) : user.getId() != null)
-            return false;
+        if (getId() != null ? !getId().equals(user.getId()) : user.getId() != null) return false;
         if (getUsername() != null ? !getUsername().equals(user.getUsername()) : user.getUsername() != null)
             return false;
         if (getPassword() != null ? !getPassword().equals(user.getPassword()) : user.getPassword() != null)
@@ -104,7 +104,7 @@ public class User {
             return false;
         if (getLastName() != null ? !getLastName().equals(user.getLastName()) : user.getLastName() != null)
             return false;
-        return getUserRole() == user.getUserRole();
+        return getUserRole() != null ? getUserRole().equals(user.getUserRole()) : user.getUserRole() == null;
     }
 
     @Override
@@ -126,7 +126,7 @@ public class User {
                 ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", userRole=" + userRole +
+                ", userRole='" + userRole + '\'' +
                 '}';
     }
 }

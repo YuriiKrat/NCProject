@@ -1,8 +1,6 @@
-package dao;
+package dao.db;
 
 import dao.db.connection.ConnectionManager;
-import entities.DataType;
-import entities.users.User;
 import entities.users.UserRole;
 import org.apache.log4j.Logger;
 
@@ -106,10 +104,10 @@ public class InitDB {
 //        db.insertEntitiesTypes("entities.users.Customer");
 //
 //        db.insertEntitiesTypes("entities.users.User");
-//        db.insertEntitiesTypes("entities.project.Project");
-//        db.insertEntitiesTypes("entities.project.Sprint");
-//        db.insertEntitiesTypes("entities.project.Task");
-//        db.insertEntitiesTypes("entities.project.TaskStatus");
+//        db.insertEntitiesTypes("entities.projects.Project");
+//        db.insertEntitiesTypes("entities.projects.Sprint");
+//        db.insertEntitiesTypes("entities.projects.Task");
+//        db.insertEntitiesTypes("entities.projects.TaskStatus");
 ////
 //        db.insertEntitiesTypes("entities.Company");
 //

@@ -1,4 +1,4 @@
-package dao.xml.users;
+package dao.xml.users.user;
 
 import entities.users.User;
 

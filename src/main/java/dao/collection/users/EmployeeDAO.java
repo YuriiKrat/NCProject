@@ -1,6 +1,7 @@
 package dao.collection.users;
 
 import dao.AbstractDAO;
+import dao.collection.AbstractDAOImpl;
 import entities.users.Employee;
 
 import java.util.List;
@@ -11,36 +12,20 @@ import java.util.stream.Collectors;
 /**
  * Created by win10 on 11.03.2017.
  */
-public class EmployeeDAO implements AbstractDAO<Employee, Integer> {
-
-    private Map<Integer, Employee> employees;
-
-    public EmployeeDAO() {
-        employees = new ConcurrentHashMap<>();
-    }
+public class EmployeeDAO extends AbstractDAOImpl<Employee, Integer> {
 
     @Override
     public void insert(Employee obj) {
-        employees.put(obj.getId(), obj);
-    }
-
-    @Override
-    public List<Employee> findAll() {
-        return employees.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList());
+        entities.put(obj.getId(), new Employee(obj));
     }
 
     @Override
     public void update(Employee obj) {
-        employees.put(obj.getId(), obj);
-    }
-
-    @Override
-    public Employee get(Integer key) {
-        return employees.get(key);
+        entities.put(obj.getId(), obj);
     }
 
     @Override
     public Employee delete(Employee obj) {
-        return employees.remove(obj.getId());
+        return entities.remove(obj.getId());
     }
 }

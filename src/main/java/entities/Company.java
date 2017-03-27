@@ -22,6 +22,18 @@ public class Company {
     public Company() {
     }
 
+    public Company(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Company(Integer id, String name, List<User> employees, List<Project> projects, List<Customer> customers) {
+        this(id, name);
+        this.employees = employees;
+        this.projects = projects;
+        this.customers = customers;
+    }
+
     public List<User> getEmployees() {
         return employees;
     }

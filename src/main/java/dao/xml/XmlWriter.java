@@ -12,7 +12,7 @@ import java.io.File;
  * @version 1.0
  * @since 20.03.17.
  */
-public abstract class XmlWriter <T> {
+public abstract class XmlWriter<T> {
 
     private static final Logger logger = Logger.getLogger(XmlWriter.class);
 
@@ -20,23 +20,25 @@ public abstract class XmlWriter <T> {
     private Unmarshaller jaxbUnmarshaller;
     private File file;
 
+    protected abstract Class<T> getEntityClass();
+
     public XmlWriter(String filename) throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(getEntityClass());
-        this.jaxbMarshaller = jaxbContext.createMarshaller();
-        this.jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-        this.jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        this.file = new File(filename);
-    }
 
-    protected abstract Class<T> getEntityClass();
+        jaxbMarshaller = jaxbContext.createMarshaller();
+        jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        file = new File(filename);
+    }
 
     protected T unmarshall() {
         T element = null;
+
         if(file.exists()) {
             Source source = new StreamSource(file);
             try {
-                logger.info("Attempting to retrieve " + getEntityClass().getName() +
-                        " enities from xml");
+                logger.info("Attempting to retrieve " + getEntityClass().getName() + " entities from xml");
+
                 JAXBElement<T> root = jaxbUnmarshaller.unmarshal(source, getEntityClass());
                 element = root.getValue();
             } catch (JAXBException e) {
@@ -49,12 +51,11 @@ public abstract class XmlWriter <T> {
 
     protected void marshall(T element) {
         try {
-            logger.info("Attempting to write " + getEntityClass().getName() +
-                    " enities to xml");
+            logger.info("Attempting to write " + getEntityClass().getName() + " enities to xml");
             jaxbMarshaller.marshal(element, file);
         } catch (JAXBException e) {
             logger.error("Failing to write " + getEntityClass().getName() + " entities to xml!");
         }
     }
-
 }
+

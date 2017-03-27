@@ -1,7 +1,9 @@
 package dao.collection.project;
 
 import dao.AbstractDAO;
+import dao.collection.AbstractDAOImpl;
 import entities.project.Task;
+import entities.users.Manager;
 
 import java.util.List;
 import java.util.Map;
@@ -13,37 +15,20 @@ import java.util.stream.Collectors;
  * @version 1.0
  * @since 06.03.17.
  */
-public class TaskDAO implements AbstractDAO<Task, Integer> {
-
-    private Map<Integer, Task> tasks;
-
-    public TaskDAO() {
-        tasks = new ConcurrentHashMap<>();
-    }
+public class TaskDAO extends AbstractDAOImpl<Task, Integer> {
 
     @Override
     public void insert(Task obj) {
-        tasks.put(obj.getId(), obj);
-    }
-
-    @Override
-    public List<Task> findAll() {
-        return tasks.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList());
+        entities.put(obj.getId(), new Task(obj));
     }
 
     @Override
     public void update(Task obj) {
-        tasks.put(obj.getId(), obj);
-    }
-
-    @Override
-    public Task get(Integer key) {
-        return tasks.get(key);
+        entities.put(obj.getId(), obj);
     }
 
     @Override
     public Task delete(Task obj) {
-        return tasks.remove(obj.getId());
+        return entities.remove(obj.getId());
     }
-
 }
