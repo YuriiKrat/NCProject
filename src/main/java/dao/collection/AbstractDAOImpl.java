@@ -15,12 +15,8 @@ public abstract class AbstractDAOImpl<T, K> implements AbstractDAO<T, K> {
     protected Map<K, T> entities;
 
     public AbstractDAOImpl() {
-        entities = new ConcurrentHashMap<K, T>();
+        entities = new ConcurrentHashMap<>();
     }
-
-    @Override public abstract void insert(T obj);
-    @Override public abstract void update(T obj);
-    @Override public abstract T delete(T obj);
 
     @Override
     public List<T> findAll() {
