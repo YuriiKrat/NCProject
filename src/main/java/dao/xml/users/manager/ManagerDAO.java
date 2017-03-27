@@ -1,7 +1,6 @@
 package dao.xml.users.manager;
 
 import dao.AbstractDAO;
-
 import dao.xml.XmlWriter;
 import entities.users.Manager;
 import org.apache.log4j.Logger;

@@ -1,16 +1,12 @@
 package dao.collection.users;
 
-import dao.AbstractDAO;
 import dao.collection.AbstractDAOImpl;
 import entities.users.Employee;
 
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
-
 /**
- * Created by win10 on 11.03.2017.
+ * @author Yurii Krat
+ * @version 1.0
+ * @since 11.03.2017.
  */
 public class EmployeeDAO extends AbstractDAOImpl<Employee, Integer> {
 

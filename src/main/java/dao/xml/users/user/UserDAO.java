@@ -6,7 +6,7 @@ import entities.users.User;
 import entities.users.UserRole;
 import org.apache.log4j.Logger;
 
-import javax.xml.bind.*;
+import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.util.Collections;
 import java.util.List;
@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
  * @version 1.0
  * @since 14.03.17.
  */
-
 public class UserDAO extends XmlWriter<Users> implements AbstractDAO<User, Integer> {
 
     private static final Logger logger = Logger.getLogger(UserDAO.class);

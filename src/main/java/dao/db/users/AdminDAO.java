@@ -1,8 +1,8 @@
 package dao.db.users;
 
 import dao.db.AbstractDAOImpl;
-import dao.db.connection.ConnectionManager;
 import dao.db.DataType;
+import dao.db.connection.ConnectionManager;
 import entities.users.User;
 import entities.users.UserRole;
 import javafx.util.Pair;
@@ -13,8 +13,8 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.*;
-import java.util.*;
 import java.util.Date;
+import java.util.*;
 
 /**
  * @author Yurii Krat

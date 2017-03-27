@@ -2,19 +2,11 @@ package dao.xml.projects.project;
 
 import dao.AbstractDAO;
 import dao.xml.XmlWriter;
-import dao.xml.projects.task.TaskDAO;
 import entities.project.Project;
-import entities.project.Sprint;
-import entities.project.Task;
-import entities.project.TaskStatus;
-import entities.users.Qualification;
 import org.apache.log4j.Logger;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.parsers.ParserConfigurationException;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**

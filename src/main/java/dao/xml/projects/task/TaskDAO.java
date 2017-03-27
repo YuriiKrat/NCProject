@@ -7,7 +7,7 @@ import entities.project.TaskStatus;
 import entities.users.Qualification;
 import org.apache.log4j.Logger;
 
-import javax.xml.bind.*;
+import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.util.ArrayList;
 import java.util.Collections;

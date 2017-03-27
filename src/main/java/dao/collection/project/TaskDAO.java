@@ -1,14 +1,7 @@
 package dao.collection.project;
 
-import dao.AbstractDAO;
 import dao.collection.AbstractDAOImpl;
 import entities.project.Task;
-import entities.users.Manager;
-
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 /**
  * @author Yurii Krat

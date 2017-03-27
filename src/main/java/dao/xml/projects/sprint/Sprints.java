@@ -10,9 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Denys Vodotiiets.
+ * @author Yurii Krat
+ * @version 1.0
+ * @since 20.03.17.
  */
-
 @XmlRootElement(name = "sprints")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Sprints {
