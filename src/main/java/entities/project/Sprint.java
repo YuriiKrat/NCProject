@@ -36,7 +36,7 @@ public class Sprint {
             tasks = new ArrayList<>();
 
             for (Task task : sprint.getTasks()) {
-//                tasks.add(new Task(task));
+                tasks.add(new Task(task));
             }
         }
     }

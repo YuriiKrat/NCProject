@@ -6,8 +6,6 @@ out/
 target/
 *.class
 *.jar
-xml/
-json/
 *.war
 *.ear
 *.log
