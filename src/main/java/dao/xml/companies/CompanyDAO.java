@@ -90,23 +90,20 @@ public class CompanyDAO extends XmlWriter<Companies> implements AbstractDAO<Comp
     }
 
     @Override
-    public Company delete(Company obj) {
+    public void delete(Company obj) {
         logger.info("Attempting to delete company with id = " + obj.getId());
 
-        Company company = null;
         companies = unmarshall();
 
         if (companies != null) {
-            for (Company p : companies.getCompanies()) {
-                if (obj.equals(p)) {
-                    company = p;
+            for (Company company : companies.getCompanies()) {
+                if (obj.equals(company)) {
                     companies.getCompanies().remove(company);
                     marshall(companies);
                     break;
                 }
             }
         }
-        return company;
     }
 
     @Override

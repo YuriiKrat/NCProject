@@ -94,23 +94,20 @@ public class CustomerDAO extends XmlWriter<Customers> implements AbstractDAO<Cus
     }
 
     @Override
-    public Customer delete(Customer obj) {
+    public void delete(Customer obj) {
         logger.info("Attempting to delete customer with id = " + obj.getId());
 
-        Customer customer = null;
         customers = unmarshall();
 
         if (customers != null) {
-            for (Customer c : customers.getCustomers()) {
-                if (obj.equals(c)) {
-                    customer = c;
+            for (Customer customer : customers.getCustomers()) {
+                if (obj.equals(customer)) {
                     customers.getCustomers().remove(customer);
                     marshall(customers);
                     break;
                 }
             }
         }
-        return customer;
     }
 
     @Override

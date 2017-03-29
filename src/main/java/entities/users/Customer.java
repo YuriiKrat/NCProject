@@ -22,10 +22,12 @@ public class Customer extends User {
 
     public Customer() {
         setUserRole(UserRole.CUSTOMER.toString());
+        projects = new ArrayList<>();
     }
 
     public Customer(Integer id, String username, String password, String firstName, String lastName) {
         super(id, username, password, firstName, lastName, UserRole.CUSTOMER.toString());
+        projects = new ArrayList<>();
     }
 
     public Customer(Integer id, String username, String password, String firstName, String lastName,
@@ -46,7 +48,6 @@ public class Customer extends User {
             }
         }
     }
-
 
     public List<Project> getProjects() {
         return projects;

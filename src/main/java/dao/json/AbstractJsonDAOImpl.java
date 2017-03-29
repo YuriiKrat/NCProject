@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,14 +40,16 @@ public abstract class AbstractJsonDAOImpl<T, K> implements AbstractDAO<T, K> {
         }
 
         if (entities != null) {
-            for (T user : entities) {
-                if ((getEntityId(user).equals(getEntityId(obj)))) {
+            for (T entity : entities) {
+                if ((getEntityId(entity).equals(getEntityId(obj)))) {
                     unique = false;
                     break;
                 }
             }
-            entities.add(obj);
+        } else {
+            entities = new ArrayList<>();
         }
+        entities.add(obj);
         writeValues(unique, entities);
     }
 
@@ -98,7 +101,7 @@ public abstract class AbstractJsonDAOImpl<T, K> implements AbstractDAO<T, K> {
             entities = readValuesMapper.readValue(file, TypeFactory.defaultInstance()
                     .constructCollectionType(List.class, getEntityClass()));
         } catch (IOException e) {
-            logger.warn("Failed to read user's entities from json file! " + e.getMessage());
+            logger.warn("Failed to read entities from json file! " + e.getMessage());
         }
         if (entities != null) {
             for(T entity: entities) {
@@ -110,9 +113,8 @@ public abstract class AbstractJsonDAOImpl<T, K> implements AbstractDAO<T, K> {
     }
 
     @Override
-    public T delete(T obj) {
+    public void delete(T obj) {
         boolean deleted = false;
-        T entity = null;
         List<T> entities = null;
         ObjectMapper readValuesMapper = new ObjectMapper();
 
@@ -129,14 +131,13 @@ public abstract class AbstractJsonDAOImpl<T, K> implements AbstractDAO<T, K> {
         if(entities != null) {
             for (int i = 0; i < entities.size(); i++) {
                 if (getEntityId(entities.get(i)).equals(getEntityId(obj))) {
-                    entity = entities.remove(i);
+                    entities.remove(i);
                     deleted = true;
                     break;
                 }
             }
             writeValues(deleted, entities);
         }
-        return entity;
     }
 
     private void writeValues(boolean flag, List<T> entities) {

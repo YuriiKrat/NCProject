@@ -94,23 +94,20 @@ public class ManagerDAO extends XmlWriter<Managers> implements AbstractDAO<Manag
     }
 
     @Override
-    public Manager delete(Manager obj) {
+    public void delete(Manager obj) {
         logger.info("Attempting to delete manager with id = " + obj.getId());
 
-        Manager manager = null;
         managers = unmarshall();
 
         if (managers != null) {
-            for (Manager m : managers.getManagers()) {
-                if (obj.equals(m)) {
-                    manager = m;
+            for (Manager manager : managers.getManagers()) {
+                if (obj.equals(manager)) {
                     managers.getManagers().remove(manager);
                     marshall(managers);
                     break;
                 }
             }
         }
-        return manager;
     }
 
     @Override

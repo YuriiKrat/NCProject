@@ -21,7 +21,7 @@ public class EmployeeDAO extends AbstractDAOImpl<Employee, Integer> {
     }
 
     @Override
-    public Employee delete(Employee obj) {
-        return entities.remove(obj.getId());
+    public void delete(Employee obj) {
+        entities.remove(obj.getId());
     }
 }

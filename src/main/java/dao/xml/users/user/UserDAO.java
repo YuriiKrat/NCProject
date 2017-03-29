@@ -3,11 +3,9 @@ package dao.xml.users.user;
 import dao.AbstractDAO;
 import dao.xml.XmlWriter;
 import entities.users.User;
-import entities.users.UserRole;
 import org.apache.log4j.Logger;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.parsers.ParserConfigurationException;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -90,13 +88,13 @@ public class UserDAO extends XmlWriter<Users> implements AbstractDAO<User, Integ
     }
 
     @Override
-    public User delete(User obj) {
+    public void delete(User obj) {
         logger.info("Attempting to delete user with id = " + obj.getId());
-        User user = null;
+
         users = unmarshall();
         if (users != null) {
             for (int i = 0; i < users.getUsers().size(); i++) {
-                user = users.getUsers().get(i);
+                User user = users.getUsers().get(i);
                 if (obj.equals(user)) {
                     users.getUsers().remove(user);
                     marshall(users);
@@ -104,32 +102,6 @@ public class UserDAO extends XmlWriter<Users> implements AbstractDAO<User, Integ
                 }
             }
         }
-        return user;
-    }
-
-    public static void main(String[] args) throws JAXBException, ParserConfigurationException {
-        User manager = new User();
-        manager.setId(12);
-        manager.setFirstName("FIRST");
-        manager.setLastName("LastName");
-        manager.setUsername("username");
-        manager.setUserRole(UserRole.MANAGER.toString());
-
-        UserDAO managerDAO = new UserDAO();
-
-//        System.out.println(managerDAO.get(12));
-//        System.out.println(manager.equals(managerDAO.get(12)));
-//        managerDAO.update(manager);
-        managerDAO.insert(manager);
-//        managerDAO.insert(manager);
-//        System.out.println(managerDAO.delete(manager));
-//        managerDAO.insert(manager);
-//        unMarshalingExample();
-        List<User> userList = managerDAO.findAll();
-        userList.forEach(el -> System.out.println(el.toString()));
-
-
-
     }
 
     @Override

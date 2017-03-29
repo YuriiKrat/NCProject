@@ -99,23 +99,20 @@ public class TaskDAO extends XmlWriter<Tasks> implements AbstractDAO<Task, Integ
     }
 
     @Override
-    public Task delete(Task obj) {
+    public void delete(Task obj) {
         logger.info("Attempting to delete task with id = " + obj.getId());
 
-        Task task = null;
         tasks = unmarshall();
 
         if (tasks != null) {
-            for (Task t : tasks.getTasks()) {
-                if (obj.equals(t)) {
-                    task = t;
+            for (Task task : tasks.getTasks()) {
+                if (obj.equals(task)) {
                     tasks.getTasks().remove(task);
                     marshall(tasks);
                     break;
                 }
             }
         }
-        return task;
     }
 
     @Override
@@ -131,7 +128,7 @@ public class TaskDAO extends XmlWriter<Tasks> implements AbstractDAO<Task, Integ
         task1.setStartDate(new Date());
         task1.setEstimate(10);
         task1.setPreferredQualification(Qualification.MIDDLE.toString());
-        task1.setStatus(TaskStatus.OPEN.toString());
+        task1.setTaskStatus(TaskStatus.OPEN.toString());
 
         Task task2 = new Task();
         task2.setId(2);
@@ -139,7 +136,7 @@ public class TaskDAO extends XmlWriter<Tasks> implements AbstractDAO<Task, Integ
         task2.setStartDate(new Date());
         task2.setEstimate(10);
         task2.setPreferredQualification(Qualification.MIDDLE.toString());
-        task2.setStatus(TaskStatus.OPEN.toString());
+        task2.setTaskStatus(TaskStatus.OPEN.toString());
 
         List<Task> subtasks = new ArrayList<>();
         subtasks.add(task2);

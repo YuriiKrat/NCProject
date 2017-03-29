@@ -1,7 +1,8 @@
 package dao.db.users;
 
 import dao.db.AbstractDAOImpl;
-import entities.users.User;
+import dao.db.projects.ProjectDAO;
+import entities.users.Manager;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
@@ -13,17 +14,18 @@ import java.sql.SQLException;
  * @version 1.0
  * @since 13.03.17.
  */
-public class AdminDAO extends AbstractDAOImpl<User, Integer> {
+public class ManagerDAO extends AbstractDAOImpl<Manager, Integer> {
 
-    private static final Logger logger = Logger.getLogger(AdminDAO.class);
+    private static final Logger logger = Logger.getLogger(ManagerDAO.class);
+    private ProjectDAO projectDAO;
 
-    public AdminDAO() {
-
+    public ManagerDAO() {
+        projectDAO = new ProjectDAO();
     }
 
     @Override
-    public User get(Integer key) {
-        User user = null;
+    public Manager get(Integer key) {
+        Manager manager = null;
         try {
             PreparedStatement getAttributesStatement =
                     connection.prepareStatement(getAttributesQuery, ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -32,31 +34,26 @@ public class AdminDAO extends AbstractDAOImpl<User, Integer> {
             ResultSet resultSet = getAttributesStatement.executeQuery();
             if (resultSet.last()) {
                 if (resultSet.getRow() > 0) {
-                    user = new User();
-                    user.setId(key);
+                    manager = new Manager();
+                    manager.setId(key);
                 }
                 resultSet.beforeFirst();
             }
-            setFields(resultSet, user, null);
+            setFields(resultSet, manager, projectDAO);
 
         } catch (SQLException e) {
-            logger.error("Failed to retrieve user from db! " + e.getMessage());
+            logger.error("Failed to retrieve sprint from db! " + e.getMessage());
         }
-        return user;
-    }
-
-    public static void main(String[] args) {
-        AdminDAO adminDAO = new AdminDAO();
-        System.out.println(adminDAO.get(68));
+        return manager;
     }
 
     @Override
     protected Class getEntityClass() {
-        return User.class;
+        return Manager.class;
     }
 
     @Override
-    protected Integer getEntityId(User entity) {
+    protected Integer getEntityId(Manager entity) {
         return entity.getId();
     }
 }

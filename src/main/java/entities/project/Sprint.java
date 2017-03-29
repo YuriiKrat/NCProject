@@ -16,9 +16,11 @@ public class Sprint {
     private List<Task> tasks;
 
     public Sprint() {
+        tasks = new ArrayList<>();
     }
 
     public Sprint(Integer id, String name, Boolean isFinished) {
+        this();
         this.id = id;
         this.name = name;
         this.isFinished = isFinished;

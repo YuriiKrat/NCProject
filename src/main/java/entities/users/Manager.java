@@ -16,10 +16,12 @@ public class Manager extends User {
 
     public Manager() {
         setUserRole(UserRole.MANAGER.toString());
+        projects = new ArrayList<>();
     }
 
     public Manager(Integer id, String username, String password, String firstName, String lastName) {
         super(id, username, password, firstName, lastName, UserRole.MANAGER.toString());
+        projects = new ArrayList<>();
     }
 
     public Manager(Integer id, String username, String password, String firstName, String lastName,

@@ -21,7 +21,7 @@ public class SprintDAO extends AbstractDAOImpl<Sprint, Integer> {
     }
 
     @Override
-    public Sprint delete(Sprint obj) {
-        return entities.remove(obj.getId());
+    public void delete(Sprint obj) {
+        entities.remove(obj.getId());
     }
 }

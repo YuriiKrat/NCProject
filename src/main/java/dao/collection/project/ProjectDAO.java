@@ -21,7 +21,7 @@ public class ProjectDAO extends AbstractDAOImpl<Project, Integer> {
     }
 
     @Override
-    public Project delete(Project obj) {
-        return entities.remove(obj.getId());
+    public void delete(Project obj) {
+        entities.remove(obj.getId());
     }
 }

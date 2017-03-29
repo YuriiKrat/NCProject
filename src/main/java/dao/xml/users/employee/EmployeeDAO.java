@@ -94,23 +94,20 @@ public class EmployeeDAO extends XmlWriter<Employees> implements AbstractDAO<Emp
     }
 
     @Override
-    public Employee delete(Employee obj) {
+    public void delete(Employee obj) {
         logger.info("Attempting to delete employee with id = " + obj.getId());
 
-        Employee employee = null;
         employees = unmarshall();
 
         if (employees != null) {
-            for (Employee e : employees.getEmployees()) {
-                if (obj.equals(e)) {
-                    employee = e;
+            for (Employee employee : employees.getEmployees()) {
+                if (obj.equals(employee)) {
                     employees.getEmployees().remove(employee);
                     marshall(employees);
                     break;
                 }
             }
         }
-        return employee;
     }
 
     @Override

@@ -38,6 +38,6 @@ public interface AbstractDAO<T, K>{
      * Removes object from database
      * @param obj object to remove
      */
-    T delete(T obj);
+    void delete(T obj);
 
 }

@@ -94,23 +94,20 @@ public class SprintDAO extends XmlWriter<Sprints> implements AbstractDAO<Sprint,
     }
 
     @Override
-    public Sprint delete(Sprint obj) {
+    public void delete(Sprint obj) {
         logger.info("Attempting to delete sprint with id = " + obj.getId());
 
-        Sprint sprint = null;
         sprints = unmarshall();
 
         if (sprints != null) {
-            for (Sprint s : sprints.getSprints()) {
-                if (obj.equals(s)) {
-                    sprint = s;
+            for (Sprint sprint : sprints.getSprints()) {
+                if (obj.equals(sprint)) {
                     sprints.getSprints().remove(sprint);
                     marshall(sprints);
                     break;
                 }
             }
         }
-        return sprint;
     }
 
     @Override
