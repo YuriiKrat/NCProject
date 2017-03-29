@@ -4,6 +4,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
  */
 @XmlRootElement(name = "tasks")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Task {
+public class Task implements Serializable {
 
     @XmlAttribute
     private Integer id;

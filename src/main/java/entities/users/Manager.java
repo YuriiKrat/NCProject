@@ -2,6 +2,7 @@ package entities.users;
 
 import entities.project.Project;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
  * @version 1.0
  * @since 26.02.17.
  */
-public class Manager extends User {
+public class Manager extends User implements Serializable {
 
     private List<Project> projects;
 

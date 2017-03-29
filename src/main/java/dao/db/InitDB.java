@@ -97,25 +97,25 @@ public class InitDB {
     public static void main(String[] args) {
         InitDB db = new InitDB();
 
-//        db.insertEntitiesTypes("java.util.LinkedList");
-//        db.insertEntitiesTypes("java.util.ArrayList");
-//        db.insertEntitiesTypes("entities.users.Manager");
-//        db.insertEntitiesTypes("entities.users.Employee");
-//        db.insertEntitiesTypes("entities.users.Customer");
+        db.insertEntitiesTypes("java.util.LinkedList");
+        db.insertEntitiesTypes("java.util.ArrayList");
+        db.insertEntitiesTypes("entities.users.Manager");
+        db.insertEntitiesTypes("entities.users.Employee");
+        db.insertEntitiesTypes("entities.users.Customer");
+
+        db.insertEntitiesTypes("entities.users.User");
+        db.insertEntitiesTypes("entities.projects.Project");
+        db.insertEntitiesTypes("entities.projects.Sprint");
+        db.insertEntitiesTypes("entities.projects.Task");
+        db.insertEntitiesTypes("entities.projects.TaskStatus");
 //
-//        db.insertEntitiesTypes("entities.users.User");
-//        db.insertEntitiesTypes("entities.projects.Project");
-//        db.insertEntitiesTypes("entities.projects.Sprint");
-//        db.insertEntitiesTypes("entities.projects.Task");
-//        db.insertEntitiesTypes("entities.projects.TaskStatus");
-////
-//        db.insertEntitiesTypes("entities.Company");
-//
-//        db.insertAttributeTypes(DataType.BOOLEAN.toString());
-//        db.insertAttributeTypes(DataType.DATE.toString());
-//        db.insertAttributeTypes(DataType.DOUBLE.toString());
-//        db.insertAttributeTypes(DataType.INTEGER.toString());
-//        db.insertAttributeTypes(DataType.STRING.toString());
+        db.insertEntitiesTypes("entities.Company");
+
+        db.insertAttributeTypes(DataType.BOOLEAN.toString());
+        db.insertAttributeTypes(DataType.DATE.toString());
+        db.insertAttributeTypes(DataType.DOUBLE.toString());
+        db.insertAttributeTypes(DataType.INTEGER.toString());
+        db.insertAttributeTypes(DataType.STRING.toString());
 
 
     }

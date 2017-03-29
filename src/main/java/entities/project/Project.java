@@ -1,5 +1,6 @@
 package entities.project;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
  * @version 1.0
  * @since 26.02.17.
  */
-public class Project {
+public class Project implements Serializable {
 
     private Integer id;
     private String name;
