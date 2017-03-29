@@ -94,23 +94,20 @@ public class ProjectDAO extends XmlWriter<Projects> implements AbstractDAO<Proje
     }
 
     @Override
-    public Project delete(Project obj) {
+    public void delete(Project obj) {
         logger.info("Attempting to delete project with id = " + obj.getId());
 
-        Project project = null;
         projects = unmarshall();
 
         if (projects != null) {
-            for (Project p : projects.getProjects()) {
-                if (obj.equals(p)) {
-                    project = p;
+            for (Project project : projects.getProjects()) {
+                if (obj.equals(project)) {
                     projects.getProjects().remove(project);
                     marshall(projects);
                     break;
                 }
             }
         }
-        return project;
     }
 
     @Override

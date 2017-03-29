@@ -4,8 +4,6 @@ import dao.json.AbstractJsonDAOImpl;
 import entities.project.Sprint;
 import org.apache.log4j.Logger;
 
-import java.io.File;
-
 /**
  * @author Yurii Krat
  * @version 1.0
@@ -16,7 +14,6 @@ public class SprintDAO extends AbstractJsonDAOImpl<Sprint, Integer> {
     private static final Logger logger = Logger.getLogger(SprintDAO.class);
 
     private static final String FILE_NAME = "json/entities/projects/Sprints.txt";
-    private File file;
 
     public SprintDAO() {
         super(FILE_NAME);

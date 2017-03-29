@@ -21,7 +21,7 @@ public class TaskDAO extends AbstractDAOImpl<Task, Integer> {
     }
 
     @Override
-    public Task delete(Task obj) {
-        return entities.remove(obj.getId());
+    public void delete(Task obj) {
+        entities.remove(obj.getId());
     }
 }

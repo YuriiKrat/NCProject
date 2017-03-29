@@ -1,10 +1,7 @@
-package dao.json.companies;
+package dao.json;
 
-import dao.json.AbstractJsonDAOImpl;
 import entities.Company;
 import org.apache.log4j.Logger;
-
-import java.io.File;
 
 /**
  * @author Yurii Krat
@@ -15,8 +12,7 @@ public class CompanyDAO extends AbstractJsonDAOImpl<Company, Integer> {
 
     private static final Logger logger = Logger.getLogger(CompanyDAO.class);
 
-    private static final String FILE_NAME = "json/entities/companies/Companies.txt";
-    private File file;
+    private static final String FILE_NAME = "json/entities/Companies.txt";
 
     public CompanyDAO() {
         super(FILE_NAME);

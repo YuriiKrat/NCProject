@@ -21,8 +21,8 @@ public class ManagerDAO extends AbstractDAOImpl<Manager, Integer> {
     }
 
     @Override
-    public Manager delete(Manager obj) {
-        return entities.remove(obj.getId());
+    public void delete(Manager obj) {
+        entities.remove(obj.getId());
     }
 
 }

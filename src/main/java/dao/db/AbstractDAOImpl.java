@@ -10,10 +10,7 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * @author Yurii Krat
@@ -22,10 +19,12 @@ import java.util.Properties;
  */
 public abstract class AbstractDAOImpl<T, K> implements AbstractDAO<T, K>{
 
-    protected ConnectionManager connectionManager;
     private static final Logger logger = Logger.getLogger(AbstractDAOImpl.class);
 
-    private static final String propFileName = "entities-types.properties";
+    private static final String PROP_FILE_NAME = "entities-types.properties";
+
+    protected Connection connection;
+    private ConnectionManager connectionManager;
 
     protected static final String entityTableName = "entities";
     protected static final String entitiesTypeTableName = "entities_type";
@@ -40,13 +39,26 @@ public abstract class AbstractDAOImpl<T, K> implements AbstractDAO<T, K>{
     protected static final String doubleValueColumn = "double_value";
     protected static final String dateValueColumn = "date_value";
     protected static final String booleanValueColumn = "boolean_value";
+    protected static final String entityIdColumn = "entity_id";
+
+    protected static String getAttributesQuery = "SELECT " + attributesTableName + ".id, " +
+            attributesTableName + ".name, " +
+            attributesTableName + ".is_multiple, " +
+            attributeTypesTableName + ".name AS type_name FROM " + attributesTableName +
+            " INNER JOIN " + referencesTableName +
+            " ON " + referencesTableName  + ".attribute_id = "
+            + attributesTableName + ".id LEFT JOIN " + attributeTypesTableName +
+            " ON " + attributeTypesTableName  + ".id = "
+            + attributesTableName + ".type_id WHERE entity_id = ?;";
+    private static String deleteValuesQuery = "DELETE FROM " + valuesTableName + " WHERE attribute_id = ?;";
 
     private Properties properties;
 
     public AbstractDAOImpl() {
         connectionManager = new ConnectionManager();
+        connection = connectionManager.getConnection();
         properties = new Properties();
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(PROP_FILE_NAME);
         try {
             properties.load(inputStream);
         } catch (IOException e) {
@@ -79,13 +91,13 @@ public abstract class AbstractDAOImpl<T, K> implements AbstractDAO<T, K>{
         String insertObjectValuesQuery = "INSERT INTO " + valuesTableName + " (attribute_id)" +
                 " VALUES (?);";
 
-        Connection connection = connectionManager.getConnection();
         int entity_id;
         int attribute_id;
         Class clazz = getEntityClass();
         Map<Method, Pair<DataType, String>> attributes = new HashMap<>();
-        for (Method method : clazz.getDeclaredMethods()) {
-            if (method.getName().startsWith("get") && !method.getName().startsWith("getId")) {
+        for (Method method : clazz.getMethods()) {
+            if (method.getName().startsWith("get") && !method.getName().startsWith("getId")
+                    && !method.getName().startsWith("getClass")) {
                 attributes.put(method, getReturnType(method));
             }
         }
@@ -145,7 +157,7 @@ public abstract class AbstractDAOImpl<T, K> implements AbstractDAO<T, K>{
                         switch (column) {
                             case textValueColumn:
                                 insertValueStatement = connection.prepareStatement(insertStringValuesQuery);
-                                insertValueStatement.setString(2, param.toString());
+                                insertValueStatement.setString(2, (String)param);
                                 break;
                             case integerValueColumn:
                                 insertValueStatement = connection.prepareStatement(insertIntegerValuesQuery);
@@ -192,27 +204,11 @@ public abstract class AbstractDAOImpl<T, K> implements AbstractDAO<T, K>{
                 logger.error("Failed to do rollback! " + e1.getMessage());
             }
         }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            logger.error("Failed to close connection! " + e.getMessage());
-        }
 
     }
 
     @Override
     public void update(T obj) {
-        String getAttributesQuery = "SELECT " + attributesTableName + ".id, " +
-                attributesTableName + ".name, " +
-                attributesTableName + ".is_multiple, " +
-                attributeTypesTableName + ".name AS type_name FROM " + attributesTableName +
-                " INNER JOIN " + referencesTableName +
-                " ON " + referencesTableName  + ".attribute_id = "
-                + attributesTableName + ".id LEFT JOIN " + attributeTypesTableName +
-                " ON " + attributeTypesTableName  + ".id = "
-                + attributesTableName + ".type_id WHERE entity_id = ?;";
-
-        Connection connection = connectionManager.getConnection();
         try {
             connection.setAutoCommit(false);
             PreparedStatement getAttributesStatement = connection.prepareStatement(getAttributesQuery);
@@ -221,13 +217,20 @@ public abstract class AbstractDAOImpl<T, K> implements AbstractDAO<T, K>{
             while (resultSet.next()) {
                 try {
                     if(!resultSet.getBoolean("is_multiple")) {
-                        setValuesWhenUpdate(connection, resultSet, obj);
+                        setValuesWhenUpdate(resultSet, obj);
 
                     } else {
                         Method method = getEntityClass().getMethod("get" + resultSet.getString("name"));
                         List values = (List) method.invoke(obj);
+                        Integer attribute_id = resultSet.getInt("id");
+                        PreparedStatement deleteCollectionValuesStatement =
+                                connection.prepareStatement(deleteValuesQuery);
+                        deleteCollectionValuesStatement.setInt(1, attribute_id);
+                        deleteCollectionValuesStatement.executeUpdate();
                         for(Object value: values) {
-
+                            Method innerMethod = value.getClass().getMethod("getId");
+                            Integer id = (Integer) innerMethod.invoke(value);
+                            setCollectionValuesWhenUpdate(id, attribute_id);
                         }
                     }
                 } catch (InvocationTargetException | NoSuchMethodException |
@@ -237,7 +240,7 @@ public abstract class AbstractDAOImpl<T, K> implements AbstractDAO<T, K>{
             }
             connection.commit();
         } catch (SQLException e) {
-            logger.error("Failed to insert entity into db! " + e.getMessage());
+            logger.error("Failed to update entity in db! " + e.getMessage());
             try {
                 connection.rollback();
             } catch (SQLException e1) {
@@ -247,7 +250,80 @@ public abstract class AbstractDAOImpl<T, K> implements AbstractDAO<T, K>{
 
     }
 
-    private void setValuesWhenUpdate(Connection connection, ResultSet resultSet, T obj)
+    @Override
+    public void delete(T obj) {
+        String getReferencesQuery = "SELECT attribute_id FROM " + referencesTableName +
+                " WHERE entity_id = ?;";
+        String deleteAttributeBindsQuery = "DELETE FROM " + attributeBindsTableName +
+                " WHERE attribute_id = ?";
+        String deleteReferencesQuery = "DELETE FROM " + referencesTableName +
+                " WHERE entity_id = ?";
+        String deleteAttributesQuery = "DELETE FROM " + attributesTableName +
+                " WHERE id = ?";
+        String deleteEntityQuery = "DELETE FROM " + entityTableName +
+                " WHERE id = ?";
+
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement getReferencesStatement =
+                    connection.prepareStatement(getReferencesQuery);
+            getReferencesStatement.setInt(1, getEntityId(obj));
+            ResultSet resultSet = getReferencesStatement.executeQuery();
+            executeDeleteStatement(deleteReferencesQuery, getEntityId(obj));
+            while (resultSet.next()) {
+                Integer attribute_id = resultSet.getInt("attribute_id");
+                executeDeleteStatement(deleteValuesQuery, attribute_id);
+                executeDeleteStatement(deleteAttributeBindsQuery, attribute_id);
+                executeDeleteStatement(deleteAttributesQuery, attribute_id);
+            }
+            executeDeleteStatement(deleteEntityQuery, getEntityId(obj));
+            connection.commit();
+
+        } catch (SQLException e) {
+            logger.error("Failed to delete entity from db! " + e.getMessage());
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                logger.error("Failed to do rollback! " + e1.getMessage());
+            }
+        }
+
+    }
+
+    @Override
+    public List<T> findAll() {
+        List<T> entities = new ArrayList<>();
+        String getAllEntitiesIdQuery = "SELECT " + entityTableName + ".id FROM " +
+                entityTableName + " INNER JOIN " + entitiesTypeTableName +
+                " ON " + entityTableName + ".entity_type_id = " +
+                entitiesTypeTableName + ".id WHERE " +
+                entitiesTypeTableName + ".name = ?;";
+        try {
+            PreparedStatement getAllEntitiesIdStatement =
+                    connection.prepareStatement(getAllEntitiesIdQuery);
+            getAllEntitiesIdStatement.setString(1, getEntityClass().getName());
+            ResultSet resultSet = getAllEntitiesIdStatement.executeQuery();
+            while (resultSet.next()) {
+                entities.add(get((K)Integer.valueOf(resultSet.getInt("id"))));
+            }
+        } catch (SQLException e) {
+            logger.error("Failed to retrieve all entities from db! " + e.getMessage());
+        }
+        return entities;
+    }
+
+    /**
+     * Updates entity attributes which are not of collection type
+     *
+     * @param resultSet
+     * @param obj
+     * @throws SQLException
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     * @throws NoSuchMethodException
+     * @throws ClassNotFoundException
+     */
+    private void setValuesWhenUpdate(ResultSet resultSet, T obj)
             throws SQLException, InvocationTargetException, IllegalAccessException, NoSuchMethodException,
             ClassNotFoundException {
 
@@ -294,17 +370,32 @@ public abstract class AbstractDAOImpl<T, K> implements AbstractDAO<T, K>{
         statement.executeUpdate();
     }
 
-    private void setCollectionValuesWhenUpdate() {
-//        PreparedStatement statement = null;
-//        PreparedStatement getObjectTypeStatement = connection.prepareStatement(getEntityTypeQuery);
-//        getObjectTypeStatement.setInt(1, resultSet.getInt("id"));
-//        ResultSet result = getObjectTypeStatement.executeQuery();
-//        result.next();
-//        String entityTypeName = result.getString("name");
-//        statement = connection.prepareStatement(setObjectValuesQuery);
-//        statement.setInt(1, getObjectId(entityTypeName, method, obj));
-//        statement.setInt(2, resultSet.getInt("id"));
-//        statement.executeUpdate();
+    /**
+     * Updates entity attribute which is collection.
+     * So updates values from collection in value table
+     *
+     * @param entityId entity id reference
+     * @param attribute_id attribute reference
+     */
+    private void setCollectionValuesWhenUpdate(Integer entityId, Integer attribute_id) {
+        String insertCollectionValuesQuery = "INSERT INTO " + valuesTableName + " (attribute_id, entity_id)" +
+                " VALUES (?, ?);";
+        try {
+            PreparedStatement insertCollectionValuesStatement =
+                    connection.prepareStatement(insertCollectionValuesQuery);
+            insertCollectionValuesStatement.setInt(1, attribute_id);
+            insertCollectionValuesStatement.setInt(2, entityId);
+            insertCollectionValuesStatement.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("Failed to insert collection entity into db! " + e.getMessage());
+        }
+    }
+
+    private void executeDeleteStatement(String query, Integer attribute_id) throws SQLException {
+        PreparedStatement deleteStatement =
+                connection.prepareStatement(query);
+        deleteStatement.setInt(1, attribute_id);
+        deleteStatement.executeUpdate();
     }
 
     private Integer getObjectId(String name, Method method, T obj)
@@ -333,10 +424,79 @@ public abstract class AbstractDAOImpl<T, K> implements AbstractDAO<T, K>{
         }
     }
 
+    protected Pair<String, Class> getTypeInfo(String type) {
+        Class clazz = null;
+        if (DataType.INTEGER.toString().equals(type)) {
+            return new Pair<>(integerValueColumn, Integer.class);
+        } else if (DataType.STRING.toString().equals(type)) {
+            return new Pair<>(textValueColumn, String.class);
+        } else if (DataType.BOOLEAN.toString().equals(type)) {
+            return new Pair<>(booleanValueColumn, Boolean.class);
+        } else if (DataType.DATE.toString().equals(type)) {
+            return new Pair<>(dateValueColumn, java.util.Date.class);
+        } else if (DataType.DOUBLE.toString().equals(type)) {
+            return new Pair<>(doubleValueColumn, Double.class);
+        }
+        return new Pair<>(null, null);
+
+    }
+
+    protected void setFields(ResultSet resultSet, T obj, AbstractDAO dao) throws SQLException {
+        while (resultSet.next()) {
+            Integer attribute_id = resultSet.getInt("id");
+            String attribute_name = resultSet.getString("name");
+            String type_name = resultSet.getString("type_name");
+            Pair<String, Class> pair = getTypeInfo(type_name);
+            String column = pair.getKey();
+            Class classType = pair.getValue();
+            if (column == null) {
+                column = entityIdColumn;
+            }
+            if (classType == null) {
+                classType = List.class;
+            }
+            String getValueQuery = "SELECT " + column + " FROM " + valuesTableName +
+                    " WHERE attribute_id = ?;";
+            PreparedStatement getValueStatement =
+                    connection.prepareStatement(getValueQuery);
+            getValueStatement.setInt(1, attribute_id);
+            ResultSet value = getValueStatement.executeQuery();
+            if (value.next()) {
+                Class clazz = obj.getClass();
+                try {
+                    Method method = clazz.getMethod("set" + attribute_name, classType);
+                    if (DataType.INTEGER.toString().equals(type_name)) {
+                        method.invoke(obj, value.getInt(integerValueColumn));
+                    } else if (DataType.STRING.toString().equals(type_name)) {
+                        method.invoke(obj, value.getString(textValueColumn));
+                    } else if (DataType.BOOLEAN.toString().equals(type_name)) {
+                        method.invoke(obj, value.getBoolean(booleanValueColumn));
+                    } else if (DataType.DATE.toString().equals(type_name)) {
+                        method.invoke(obj, value.getDate(dateValueColumn));
+                    } else if (DataType.DOUBLE.toString().equals(type_name)) {
+                        method.invoke(obj, value.getDouble(doubleValueColumn));
+                    } else {
+                        List<Object> list = new ArrayList<>();
+                        do {
+                            list.add(dao.get(value.getInt(entityIdColumn)));
+                        } while (value.next());
+                        method.invoke(obj, list);
+                    }
+
+                } catch (IllegalAccessException | InvocationTargetException |
+                        NoSuchMethodException e) {
+                    logger.error("Failed to set value! " + e.getMessage());
+                }
+            }
+        }
+    }
+
     protected abstract Class getEntityClass();
 
     protected abstract Integer getEntityId(T entity);
 
-    protected abstract Class getFieldClass(Object field);
+    public void closeConnection() {
+        connectionManager.closeConnection();
+    }
 
 }

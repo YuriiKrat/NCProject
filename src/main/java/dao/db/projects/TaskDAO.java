@@ -1,7 +1,7 @@
-package dao.db.users;
+package dao.db.projects;
 
 import dao.db.AbstractDAOImpl;
-import entities.users.User;
+import entities.project.Task;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
@@ -13,17 +13,17 @@ import java.sql.SQLException;
  * @version 1.0
  * @since 13.03.17.
  */
-public class AdminDAO extends AbstractDAOImpl<User, Integer> {
+public class TaskDAO extends AbstractDAOImpl<Task, Integer> {
 
-    private static final Logger logger = Logger.getLogger(AdminDAO.class);
+    private static final Logger logger = Logger.getLogger(TaskDAO.class);
 
-    public AdminDAO() {
+    public TaskDAO() {
 
     }
 
     @Override
-    public User get(Integer key) {
-        User user = null;
+    public Task get(Integer key) {
+        Task task = null;
         try {
             PreparedStatement getAttributesStatement =
                     connection.prepareStatement(getAttributesQuery, ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -32,31 +32,25 @@ public class AdminDAO extends AbstractDAOImpl<User, Integer> {
             ResultSet resultSet = getAttributesStatement.executeQuery();
             if (resultSet.last()) {
                 if (resultSet.getRow() > 0) {
-                    user = new User();
-                    user.setId(key);
+                    task = new Task();
+                    task.setId(key);
                 }
                 resultSet.beforeFirst();
             }
-            setFields(resultSet, user, null);
-
+            setFields(resultSet, task, this);
         } catch (SQLException e) {
             logger.error("Failed to retrieve user from db! " + e.getMessage());
         }
-        return user;
-    }
-
-    public static void main(String[] args) {
-        AdminDAO adminDAO = new AdminDAO();
-        System.out.println(adminDAO.get(68));
+        return task;
     }
 
     @Override
     protected Class getEntityClass() {
-        return User.class;
+        return Task.class;
     }
 
     @Override
-    protected Integer getEntityId(User entity) {
+    protected Integer getEntityId(Task entity) {
         return entity.getId();
     }
 }

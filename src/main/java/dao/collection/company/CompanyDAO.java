@@ -21,7 +21,7 @@ public class CompanyDAO extends AbstractDAOImpl<Company, Integer> {
     }
 
     @Override
-    public Company delete(Company obj) {
-        return entities.remove(obj.getId());
+    public void delete(Company obj) {
+        entities.remove(obj.getId());
     }
 }

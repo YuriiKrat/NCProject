@@ -21,7 +21,7 @@ public class CustomerDAO extends AbstractDAOImpl<Customer, Integer> {
     }
 
     @Override
-    public Customer delete(Customer obj) {
-        return entities.remove(obj.getId());
+    public void delete(Customer obj) {
+        entities.remove(obj.getId());
     }
 }

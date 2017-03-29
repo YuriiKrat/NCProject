@@ -23,6 +23,8 @@ public class ConnectionManager {
     private static final String propFileName = "postgre.properties";
     private static final Logger logger = Logger.getLogger(ConnectionManager.class);
 
+    private Connection connection;
+
     public ConnectionManager(){
 
         try {
@@ -48,17 +50,25 @@ public class ConnectionManager {
 
     public Connection getConnection() {
 
-        Connection connection = null;
+        if (connection == null) {
+            try {
+                connection = DriverManager.getConnection(HOST, USERNAME, PASSWORD);
+                logger.debug("Connection established!");
+            } catch (SQLException e) {
+                logger.error("Connect failed!" + e.getMessage());
+            }
 
-        try {
-            connection = DriverManager.getConnection(HOST, USERNAME, PASSWORD);
-            logger.debug("Connection established!");
-        } catch (SQLException e) {
-            logger.error("Connect failed!" + e.getMessage());
         }
-
         return connection;
 
+    }
+
+    public void closeConnection() {
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            logger.error("Failed to close connection! " + e.getMessage());
+        }
     }
 
     public static void main(String[] args) {

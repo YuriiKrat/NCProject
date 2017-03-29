@@ -18,9 +18,11 @@ public class Project {
     private List<Sprint> sprints;
 
     public Project() {
+        sprints = new ArrayList<>();
     }
 
     public Project(Integer id, String name, Date startDate, Date finishDate) {
+        this();
         this.id = id;
         this.name = name;
         this.startDate = startDate;

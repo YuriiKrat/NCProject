@@ -4,8 +4,6 @@ import dao.json.AbstractJsonDAOImpl;
 import entities.project.Task;
 import org.apache.log4j.Logger;
 
-import java.io.File;
-
 /**
  * @author Yurii Krat
  * @version 1.0
@@ -16,7 +14,6 @@ public class TaskDAO extends AbstractJsonDAOImpl<Task, Integer> {
     private static final Logger logger = Logger.getLogger(TaskDAO.class);
 
     private static final String FILE_NAME = "json/entities/projects/Tasks.txt";
-    private File file;
 
     public TaskDAO() {
         super(FILE_NAME);

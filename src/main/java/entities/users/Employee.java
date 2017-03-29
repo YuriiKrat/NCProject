@@ -17,11 +17,13 @@ public class Employee extends User {
 
     public Employee() {
         setUserRole(UserRole.EMPLOYEE.toString());
+        tasks = new ArrayList<>();
     }
 
     public Employee(Integer id, String username, String password, String firstName, String lastName,
                     String qualification) {
         super(id, username, password, firstName, lastName, UserRole.EMPLOYEE.toString());
+        this.tasks = new ArrayList<>();
         this.qualification = qualification;
     }
 
@@ -39,7 +41,7 @@ public class Employee extends User {
             tasks = new ArrayList<>();
 
             for (Task task : employee.getTasks()) {
-//                tasks.add(new Task(task));
+                tasks.add(new Task(task));
             }
         }
     }

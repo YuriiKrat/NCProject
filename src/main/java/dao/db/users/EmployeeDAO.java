@@ -1,7 +1,8 @@
 package dao.db.users;
 
 import dao.db.AbstractDAOImpl;
-import entities.users.User;
+import dao.db.projects.TaskDAO;
+import entities.users.Employee;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
@@ -13,17 +14,18 @@ import java.sql.SQLException;
  * @version 1.0
  * @since 13.03.17.
  */
-public class AdminDAO extends AbstractDAOImpl<User, Integer> {
+public class EmployeeDAO extends AbstractDAOImpl<Employee, Integer> {
 
-    private static final Logger logger = Logger.getLogger(AdminDAO.class);
+    private static final Logger logger = Logger.getLogger(EmployeeDAO.class);
+    private TaskDAO taskDAO;
 
-    public AdminDAO() {
-
+    public EmployeeDAO() {
+        taskDAO = new TaskDAO();
     }
 
     @Override
-    public User get(Integer key) {
-        User user = null;
+    public Employee get(Integer key) {
+        Employee employee = null;
         try {
             PreparedStatement getAttributesStatement =
                     connection.prepareStatement(getAttributesQuery, ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -32,31 +34,26 @@ public class AdminDAO extends AbstractDAOImpl<User, Integer> {
             ResultSet resultSet = getAttributesStatement.executeQuery();
             if (resultSet.last()) {
                 if (resultSet.getRow() > 0) {
-                    user = new User();
-                    user.setId(key);
+                    employee = new Employee();
+                    employee.setId(key);
                 }
                 resultSet.beforeFirst();
             }
-            setFields(resultSet, user, null);
+            setFields(resultSet, employee, taskDAO);
 
         } catch (SQLException e) {
-            logger.error("Failed to retrieve user from db! " + e.getMessage());
+            logger.error("Failed to retrieve sprint from db! " + e.getMessage());
         }
-        return user;
-    }
-
-    public static void main(String[] args) {
-        AdminDAO adminDAO = new AdminDAO();
-        System.out.println(adminDAO.get(68));
+        return employee;
     }
 
     @Override
     protected Class getEntityClass() {
-        return User.class;
+        return Employee.class;
     }
 
     @Override
-    protected Integer getEntityId(User entity) {
+    protected Integer getEntityId(Employee entity) {
         return entity.getId();
     }
 }

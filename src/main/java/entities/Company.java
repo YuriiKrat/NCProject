@@ -4,6 +4,10 @@ import entities.project.Project;
 import entities.users.Customer;
 import entities.users.User;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +16,11 @@ import java.util.List;
  * @version 1.0
  * @since 26.02.17.
  */
+@XmlRootElement(name = "companies")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Company {
 
+    @XmlAttribute
     private Integer id;
     private String name;
     private List<User> employees;

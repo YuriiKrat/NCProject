@@ -23,32 +23,35 @@ public class Task {
     private Integer estimate;
     private Date startDate;
     private String preferredQualification;
-    private String status;
+    private String taskStatus;
     private List<Task> influencedTasks;
     private List<Task> subtasks;
 
     public Task() {
+        subtasks = new ArrayList<>();
+        influencedTasks = new ArrayList<>();
     }
 
-    public Task(Integer id, String name, Integer estimate, Date startDate, String preferredQualification, String status) {
+    public Task(Integer id, String name, Integer estimate, Date startDate, String preferredQualification, String taskStatus) {
+        this();
         this.id = id;
         this.name = name;
         this.estimate = estimate;
         this.startDate = startDate;
         this.preferredQualification = preferredQualification;
-        this.status = status;
+        this.taskStatus = taskStatus;
     }
 
     public Task(Integer id, String name, Integer estimate, Date startDate, List<Task> influencedTasks,
-                List<Task> subtasks, String preferredQualification, String status) {
-        this(id, name, estimate, startDate, preferredQualification, status);
+                List<Task> subtasks, String preferredQualification, String taskStatus) {
+        this(id, name, estimate, startDate, preferredQualification, taskStatus);
         this.influencedTasks = influencedTasks;
         this.subtasks = subtasks;
     }
 
     public Task(Task task) {
         this(task.getId(), task.getName(), task.getEstimate(), task.getStartDate(), task.getPreferredQualification(),
-                task.getStatus());
+                task.getTaskStatus());
 
         if (task.getInfluencedTasks() != null) {
             influencedTasks = new ArrayList<>();
@@ -107,12 +110,12 @@ public class Task {
         this.preferredQualification = preferredQualification;
     }
 
-    public String getStatus() {
-        return status;
+    public String getTaskStatus() {
+        return taskStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setTaskStatus(String taskStatus) {
+        this.taskStatus = taskStatus;
     }
 
     public Integer getId() {
@@ -146,7 +149,7 @@ public class Task {
             return false;
         if (getPreferredQualification() != null ? !getPreferredQualification().equals(task.getPreferredQualification()) : task.getPreferredQualification() != null)
             return false;
-        if (getStatus() != null ? !getStatus().equals(task.getStatus()) : task.getStatus() != null) return false;
+        if (getTaskStatus() != null ? !getTaskStatus().equals(task.getTaskStatus()) : task.getTaskStatus() != null) return false;
         if (getInfluencedTasks() != null ? !getInfluencedTasks().equals(task.getInfluencedTasks()) : task.getInfluencedTasks() != null)
             return false;
         return getSubtasks() != null ? getSubtasks().equals(task.getSubtasks()) : task.getSubtasks() == null;
@@ -159,7 +162,7 @@ public class Task {
         result = 31 * result + (getEstimate() != null ? getEstimate().hashCode() : 0);
         result = 31 * result + (getStartDate() != null ? getStartDate().hashCode() : 0);
         result = 31 * result + (getPreferredQualification() != null ? getPreferredQualification().hashCode() : 0);
-        result = 31 * result + (getStatus() != null ? getStatus().hashCode() : 0);
+        result = 31 * result + (getTaskStatus() != null ? getTaskStatus().hashCode() : 0);
         result = 31 * result + (getInfluencedTasks() != null ? getInfluencedTasks().hashCode() : 0);
         result = 31 * result + (getSubtasks() != null ? getSubtasks().hashCode() : 0);
         return result;
@@ -170,7 +173,7 @@ public class Task {
         StringBuilder stringBuilder = new StringBuilder("Task{id=");
         stringBuilder.append(id).append(", name='").append(name).append("\', estimate=").append(estimate)
                 .append(", startDate=").append(startDate).append(", preferredQualification='")
-                .append(preferredQualification).append("\', status='").append(status)
+                .append(preferredQualification).append("\', taskStatus='").append(taskStatus)
                 .append("\' influenced tasks [ ");
 
         for (Task task : influencedTasks) {
